@@ -87,4 +87,9 @@ public class JobPost {
 
     @Column(name = "CongKhai")
     private Boolean congKhai;
+
+    @ElementCollection
+    @CollectionTable(name = "job_post_images", joinColumns = @JoinColumn(name = "job_post_id"))
+    @Column(name = "image_url")
+    private Set<String> imageUrls = new HashSet<>();
 }

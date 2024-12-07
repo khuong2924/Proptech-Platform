@@ -27,6 +27,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    private String role;
+
+    private boolean premium;
+
     @OneToOne(mappedBy = "user")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Notification")
+@Table(name = "notifications")
 @Data
 public class Notification {
 
