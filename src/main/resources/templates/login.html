@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MakeupConnect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-200 min-h-screen flex items-center justify-center p-4">
+<div class="bg-white rounded-xl shadow-2xl flex flex-col md:flex-row w-full max-w-4xl overflow-hidden">
+    <div class="bg-blue-900 text-white p-8 md:w-1/2 flex flex-col justify-center items-center text-center">
+        <h1 class="text-4xl font-bold mb-4">Proptech Platform</h1>
+        <p class="text-xl mb-8">Connecting Customers and Realtors</p>
+        <img src="https://www.senviet.art/wp-content/uploads/edd/2021/12/dai-hoc-tdt.jpg" alt="Makeup Artist" class="rounded-full w-48 h-48 object-cover shadow-lg">
+    </div>
+    <div class="p-8 md:w-1/2">
+        <h2 class="text-3xl font-semibold mb-6 text-center text-blue-900">Login</h2>
+        <form action="/login" method="POST" class="space-y-4">
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                <input type="text" id="username" name="username" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-600 focus:border-blue-600">
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <div class="relative">
+                    <input type="password" id="password" name="password" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-600 focus:border-blue-600">
+                    <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" onclick="togglePassword()">
+                        <img id="password-icon" src="../img/hide-password.svg" alt="Toggle Password" class="h-5 w-5">
+                    </button>
+                </div>
+
+                <div th:if="${error}">
+                    <span style="color:#7c3030" th:text="${error}"></span>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                    <label for="remember-me" class="ml-2 block text-sm text-gray-900">Remember password</label>
+                </div>
+                <div class="text-sm">
+                    <a href="#" class="font-medium text-blue-600 hover:text-blue-500">Forgot password?</a>
+                </div>
+            </div>
+            <div>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                    Login
+                </button>
+            </div>
+        </form>
+        <div class="mt-6 grid grid-cols-2 gap-3">
+            <div>
+                <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Login with Facebook</span>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo" class="h-5 w-5 mr-2" />
+                    Facebook
+                </a>
+            </div>
+            <div>
+                <a href="#" class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    <span class="sr-only">Login with Google</span>
+                    <img src="https://www.svgrepo.com/show/303108/google-icon-logo.svg" alt="Google Logo" class="h-5 w-5 mr-2" />
+                    Google
+                </a>
+            </div>
+        </div>
+        <p class="mt-8 text-center text-sm text-gray-600">
+            You do not have an account?
+            <a href="/signup" class="font-medium text-blue-600 hover:text-blue-500">Registry Now</a>
+        </p>
+    </div>
+</div>
+<script>
+    function togglePassword() {
+        const passwordInput = document.getElementById('password');
+        const passwordIcon = document.getElementById('password-icon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordIcon.src = '/img/show-password-3.svg';
+        } else {
+            passwordInput.type = 'password';
+            passwordIcon.src = '/img/hide-password.svg';
+        }
+    }
+
+    function toggleConfirmPassword() {
+        const confirmPasswordInput = document.getElementById('confirm-password');
+        const confirmPasswordIcon = document.getElementById('confirm-password-icon');
+
+        if (confirmPasswordInput.type === 'password') {
+            confirmPasswordInput.type = 'text';
+            confirmPasswordIcon.src = '/img/show-password-3.svg';
+        } else {
+            confirmPasswordInput.type = 'password';
+            confirmPasswordIcon.src = '/img/hide-password.svg';
+        }
+    }
+    //xóa session cũ
+    sessionStorage.removeItem("error");
+</script>
+</body>
+</html>

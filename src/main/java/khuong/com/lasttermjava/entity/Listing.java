@@ -1,7 +1,5 @@
 package khuong.com.lasttermjava.entity;
 
-package com.example.realestate.model;
-
 import jakarta.persistence.*;
 import jakarta.transaction.Transaction;
 import lombok.Data;
