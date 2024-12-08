@@ -78,67 +78,69 @@
                     </div>
                     <div class="p-4 overflow-x-auto whitespace-nowrap">
                         <div class="flex space-x-4">
-                            <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6" alt="Thumbnail 1" class="thumbnail h-20 w-32 object-cover cursor-pointer rounded" onclick="setMainImage(0)">
-                            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750" alt="Thumbnail 2" class="thumbnail h-20 w-32 object-cover cursor-pointer rounded" onclick="setMainImage(1)">
-                            <img src="https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83" alt="Thumbnail 3" class="thumbnail h-20 w-32 object-cover cursor-pointer rounded" onclick="setMainImage(2)">
-                            <img src="https://images.unsplash.com/photo-1576941089067-2de3c901e126" alt="Thumbnail 4" class="thumbnail h-20 w-32 object-cover cursor-pointer rounded" onclick="setMainImage(3)">
+                            <th:block th:each="imageUrl : ${jobPost.imageUrls}">
+                                <img th:src="@{${imageUrl}}" alt="Job Post Image" class="thumbnail h-20 w-32 object-cover cursor-pointer rounded" onclick="setMainImage(${iterStat.index})">
+                            </th:block>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="p-6">
                     <div class="flex justify-between items-start">
                         <div>
-                            <h1 class="text-3xl font-bold text-gray-800">Modern Family Home</h1>
-                            <p class="text-gray-600 mt-2">District 2, Ho Chi Minh City</p>
+                            <h1 class="text-3xl font-bold text-gray-800" th:text="${jobPost.tieuDe}">Modern Family Home</h1>
+                            <p class="text-gray-600 mt-2" th:text="${jobPost.diaChi}">District 2, Ho Chi Minh City</p>
+
                         </div>
-                        <span class="text-2xl font-bold text-blue-600">5.2 Billion VND</span>
+                        <span class="text-2xl font-bold text-blue-600" th:text="${jobPost.mucGia} + ' VND'">5.2 Billion VND</span>
+
                     </div>
 
                     <div class="mt-6">
                         <h2 class="text-xl font-semibold text-gray-800">Property Description</h2>
-                        <p class="mt-3 text-gray-600 leading-relaxed">
-                            This stunning modern family home offers a perfect blend of comfort and luxury. Featuring high ceilings, abundant natural light, and premium finishes throughout. The open-concept living area flows seamlessly to a private garden, ideal for family gatherings and outdoor entertainment.
+                        <p class="mt-3 text-gray-600 leading-relaxed" th:text="${jobPost.moTa}">
+                            This stunning modern family home offers a perfect blend of comfort and luxury...
                         </p>
                     </div>
 
                     <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div class="p-4 bg-gray-50 rounded-lg">
                             <span class="block text-sm text-gray-600">Bedrooms</span>
-                            <span class="block text-lg font-semibold text-gray-800">4</span>
+                            <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.soPhongNgu}">4</span>
                         </div>
                         <div class="p-4 bg-gray-50 rounded-lg">
                             <span class="block text-sm text-gray-600">Bathrooms</span>
-                            <span class="block text-lg font-semibold text-gray-800">3</span>
+                            <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.soPhongTamVeSinh}">3</span>
                         </div>
                         <div class="p-4 bg-gray-50 rounded-lg">
                             <span class="block text-sm text-gray-600">Area</span>
-                            <span class="block text-lg font-semibold text-gray-800">180 m²</span>
+                            <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.dienTich}">180 m²</span>
                         </div>
-                        <div class="p-4 bg-gray-50 rounded-lg">
-                            <span class="block text-sm text-gray-600">Year Built</span>
-                            <span class="block text-lg font-semibold text-gray-800">2022</span>
-                        </div>
+<!--                        <div class="p-4 bg-gray-50 rounded-lg">-->
+<!--                            <span class="block text-sm text-gray-600">Year Built</span>-->
+<!--                            <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.}">2022</span>-->
+<!--                        </div>-->
                     </div>
+
 
                     <div class="mt-8">
                         <h2 class="text-xl font-semibold text-gray-800">Property Characteristics</h2>
                         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="p-4 bg-gray-50 rounded-lg">
                                 <h3 class="font-semibold text-gray-800">Frontage</h3>
-                                <p class="mt-1 text-gray-600">8 meters width</p>
+                                <p class="mt-1 text-gray-600" th:text="${jobPost.matTien}">8 meters width</p>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg">
                                 <h3 class="font-semibold text-gray-800">Legality</h3>
-                                <p class="mt-1 text-gray-600">Full ownership certificate</p>
+                                <p class="mt-1 text-gray-600" th:text="${jobPost.giayToPhapLy}">Full ownership certificate</p>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg">
                                 <h3 class="font-semibold text-gray-800">Access</h3>
-                                <p class="mt-1 text-gray-600">Direct road access</p>
+                                <p class="mt-1 text-gray-600" th:text="${jobPost.duongVao}">Direct road access</p>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg">
                                 <h3 class="font-semibold text-gray-800">Orientation</h3>
-                                <p class="mt-1 text-gray-600">South-East facing</p>
+                                <p class="mt-1 text-gray-600" th:text="${jobPost.huongNha}">South-East facing</p>
                             </div>
                         </div>
                     </div>
@@ -186,31 +188,33 @@
 </body>
 
 <script>
-    const images = [
-        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
-        "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83",
-        "https://images.unsplash.com/photo-1576941089067-2de3c901e126"
-    ];
-    
-    let currentImageIndex = 0;
-    
-    function setMainImage(index) {
-        currentImageIndex = index;
-        document.getElementById('mainImage').src = images[index];
-        updateThumbnails();
-    }
-    
-    function previousImage() {
-        currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-        setMainImage(currentImageIndex);
-    }
-    
-    function nextImage() {
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-        setMainImage(currentImageIndex);
-    }
-    
+    // const images = [
+    //     "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
+    //     "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
+    //     "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83",
+    //     "https://images.unsplash.com/photo-1576941089067-2de3c901e126"
+    // ];
+    //
+    // let currentImageIndex = 0;
+    //
+    // function setMainImage(index) {
+    //     currentImageIndex = index;
+    //     document.getElementById('mainImage').src = images[index];
+    //     updateThumbnails();
+    // }
+    //
+    // function previousImage() {
+    //     currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+    //     setMainImage(currentImageIndex);
+    // }
+    //
+    // function nextImage() {
+    //     currentImageIndex = (currentImageIndex + 1) % images.length;
+    //     setMainImage(currentImageIndex);
+    // }
+
+
+
     function updateThumbnails() {
         const thumbnails = document.querySelectorAll('.thumbnail');
         thumbnails.forEach((thumb, index) => {

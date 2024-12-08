@@ -10,6 +10,7 @@ import khuong.com.lasttermjava.service.ImageUploadService;
 import khuong.com.lasttermjava.service.JobPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +32,7 @@ public class JobPostController {
     @Autowired
     private UserRepository userRepository;
 
+
     // Lấy danh sách tất cả JobPost
     @GetMapping
     public ResponseDTO<List<JobPostDTO>> getAllJobPosts() {
@@ -39,6 +41,8 @@ public class JobPostController {
         response.setStatus(200);
         return response;
     }
+
+
 
     // Cập nhật JobPost
     @PutMapping("/{id}")
