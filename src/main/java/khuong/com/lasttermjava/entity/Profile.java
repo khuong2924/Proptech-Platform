@@ -38,6 +38,8 @@ public class Profile {
 
     private String avtPhoto;
 
+    private String phoneNumber;
+
     public Long getUser_id() {
         return this.user.getId();
     }

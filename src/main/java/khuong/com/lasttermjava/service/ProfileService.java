@@ -41,7 +41,8 @@ public class ProfileService {
                     profile.getBio(),
                     profile.getAddress(),
                     profile.getAvtPhoto(),
-                    profile.getUser_id()
+                    profile.getUser_id(),
+                    profile.getPhoneNumber()
             ));
         }
         return profileDTOList;
@@ -62,6 +63,7 @@ public class ProfileService {
         profile.setBio(profileDTO.getBio());
         profile.setAddress(profileDTO.getAddress());
         profile.setAvtPhoto(profileDTO.getAvtPhoto());
+        profile.setPhoneNumber(profileDTO.getPhoneNumber());
         profileRepository.save(profile);
     }
 
@@ -76,6 +78,7 @@ public class ProfileService {
         profile.setBio(profileDTO.getBio());
         profile.setAddress(profileDTO.getAddress());
         profile.setAvtPhoto(profileDTO.getAvtPhoto());
+        profile.setPhoneNumber(profileDTO.getPhoneNumber());
 
         profileRepository.save(profile);
     }
@@ -113,6 +116,7 @@ public class ProfileService {
         profile.setBio(profileDTO.getBio());
         profile.setAddress(profileDTO.getAddress());
         profile.setAvtPhoto(profileDTO.getAvtPhoto());
+        profile.setPhoneNumber(profileDTO.getPhoneNumber());
 
         // Lưu lại profile đã cập nhật
         update(profile.getId(), profileDTO); // Gọi phương thức update trực tiếp
@@ -136,7 +140,8 @@ public class ProfileService {
                 profile.getBio(),
                 profile.getAddress(),
                 profile.getAvtPhoto(),
-                profile.getUser_id()
+                profile.getUser_id(),
+                profile.getPhoneNumber()
         );
     }
 
@@ -156,7 +161,8 @@ public class ProfileService {
                 profile.getBio(),
                 profile.getAddress(),
                 profile.getAvtPhoto(),
-                profile.getUser_id()
+                profile.getUser_id(),
+                profile.getPhoneNumber()
         );
     }
 

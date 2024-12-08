@@ -17,6 +17,7 @@ public class ProfileDTO {
     private String bio;
     private String address;
     private String avtPhoto;
-    private Long userId; // Thay vì trả về đối tượng User, trả về chỉ id người dùng
+    private Long userId;// Thay vì trả về đối tượng User, trả về chỉ id người dùng
+    private String phoneNumber;
 
 }
