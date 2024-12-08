@@ -55,43 +55,59 @@
             <!-- Sidebar -->
             <div class="w-full md:w-1/3 bg-white rounded-xl shadow-lg p-6">
                 <div class="flex flex-col items-center text-center">
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a" alt="Profile Picture" class="w-32 h-32 rounded-full object-cover mb-4">
-                    <h1 class="text-2xl font-bold text-gray-800">John Anderson</h1>
-                    <p class="text-gray-600 mt-2">Senior Real Estate Agent</p>
+                    <!-- Thay thế ảnh với hình ảnh profile -->
+                    <img th:src="@{${profile.avtPhoto}}" alt="Profile Picture" class="w-32 h-32 rounded-full object-cover mb-4">
+
+                    <!-- Thay thế tên -->
+                    <h1 class="text-2xl font-bold text-gray-800" th:text="${profile.fullName}">John Anderson</h1>
+
+<!--                    &lt;!&ndash; Thay thế chức danh &ndash;&gt;-->
+<!--                    <p class="text-gray-600 mt-2" th:text="${profile.}">Senior Real Estate Agent</p>-->
+
                     <div class="mt-4 space-y-2 w-full">
+                        <!-- Thay thế email -->
                         <div class="flex items-center justify-center space-x-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                             </svg>
-                            <span class="text-gray-600">john.anderson@realestate.com</span>
+                            <span class="text-gray-600" th:text="${profile.email}">john.anderson@realestate.com</span>
                         </div>
-                        <div class="flex items-center justify-center space-x-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
-                            </svg>
-                            <span class="text-gray-600">(555) 123-4567</span>
-                        </div>
+
+<!--                        &lt;!&ndash; Thay thế số điện thoại &ndash;&gt;-->
+<!--                        <div class="flex items-center justify-center space-x-2">-->
+<!--                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">-->
+<!--                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />-->
+<!--                            </svg>-->
+<!--                            <span class="text-gray-600" th:text="${profile.}">(555) 123-4567</span>-->
+<!--                        </div>-->
                     </div>
+
                     <div class="mt-6 w-full">
                         <h2 class="text-lg font-semibold text-gray-800 mb-2">About Me</h2>
-                        <p class="text-gray-600 text-sm">Passionate real estate professional with over 10 years of experience in luxury property sales and rentals. Specialized in downtown metropolitan areas.</p>
+                        <!-- Thay thế mô tả bản thân -->
+                        <p class="text-gray-600 text-sm" th:text="${profile.bio}">Passionate real estate professional with over 10 years of experience in luxury property sales and rentals. Specialized in downtown metropolitan areas.</p>
                     </div>
+
                     <div class="mt-6 w-full">
                         <h2 class="text-lg font-semibold text-gray-800 mb-2">Statistics</h2>
                         <div class="grid grid-cols-2 gap-4">
+                            <!-- Thay thế số lượng bất động sản đã bán -->
                             <div class="bg-gray-50 p-4 rounded-lg">
-                                <p class="text-2xl font-bold text-blue-600">127</p>
+                                <p class="text-2xl font-bold text-blue-600" th:text="${jobPosts.size()}">127</p>
                                 <p class="text-sm text-gray-600">Properties Sold</p>
                             </div>
+
+                            <!-- Thay thế số lượng bất động sản đang bán -->
                             <div class="bg-gray-50 p-4 rounded-lg">
-                                <p class="text-2xl font-bold text-green-600">45</p>
+                                <p class="text-2xl font-bold text-green-600" th:text="${jobPosts.size()}">45</p>
                                 <p class="text-sm text-gray-600">Active Listings</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- Main Content -->
             <div class="w-full md:w-2/3">
@@ -109,45 +125,41 @@
 
                 <!-- Property Listings -->
                 <div class="space-y-6">
-                    <!-- For Sale Property -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02]">
-                        <div class="relative">
-                            <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6" alt="Luxury House" class="w-full h-64 object-cover">
-                            <span class="absolute top-4 left-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold">For Sale</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-gray-800">Modern Luxury Villa</h3>
-                            <p class="text-2xl font-bold text-blue-600 mt-2">$1,250,000</p>
-                            <div class="flex items-center mt-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                                </svg>
-                                <span class="text-gray-600 ml-2">Beverly Hills, CA</span>
+                    <!-- Lặp qua danh sách jobPosts -->
+                    <div th:each="jobPost : ${jobPosts}">
+                        <!-- Tạo liên kết đến trang postDetail với id -->
+                        <a th:href="@{/postDetail/{id}(id=${jobPost.id})}" class="block">
+                            <!-- Property Card -->
+                            <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02]">
+                                <div class="relative">
+                                    <!-- Thay thế ảnh với ảnh từ jobPost -->
+                                    <img th:src="@{${jobPost.imageUrls[2]}}" alt="Property Image" class="w-full h-64 object-cover">
+                                    <!-- Điều chỉnh trạng thái bán hoặc cho thuê -->
+                                    <span th:class="'absolute top-4 left-4 ' + (jobPost.loaiBaiDang == 'Bán' ? 'bg-blue-600' : 'bg-green-600') + ' text-white px-3 py-1 rounded-full text-sm font-semibold'"
+                                          th:text="${jobPost.loaiBaiDang}"></span>
+                                </div>
+                                <div class="p-6">
+                                    <!-- Tiêu đề bất động sản -->
+                                    <h3 class="text-xl font-bold text-gray-800" th:text="${jobPost.tieuDe}">Modern Luxury Villa</h3>
+                                    <!-- Giá bất động sản -->
+                                    <p class="text-2xl font-bold text-gray-600 mt-2" th:text="${jobPost.mucGia}">$1,250,000</p>
+                                    <div class="flex items-center mt-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                                        </svg>
+                                        <!-- Địa chỉ bất động sản -->
+                                        <span class="text-gray-600 ml-2" th:text="${jobPost.dienTich}">Beverly Hills, CA</span>
+                                    </div>
+                                    <!-- Mô tả bất động sản -->
+                                    <p class="text-gray-600 mt-4" th:text="${jobPost.moTa}">Stunning 5-bedroom modern villa with panoramic views, infinity pool, and smart home features.</p>
+                                </div>
                             </div>
-                            <p class="text-gray-600 mt-4">Stunning 5-bedroom modern villa with panoramic views, infinity pool, and smart home features.</p>
-                        </div>
+                        </a>
                     </div>
 
-                    <!-- For Rent Property -->
-                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform hover:scale-[1.02]">
-                        <div class="relative">
-                            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267" alt="Apartment" class="w-full h-64 object-cover">
-                            <span class="absolute top-4 left-4 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold">For Rent</span>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-gray-800">Downtown Luxury Apartment</h3>
-                            <p class="text-2xl font-bold text-green-600 mt-2">$3,500/month</p>
-                            <div class="flex items-center mt-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
-                                </svg>
-                                <span class="text-gray-600 ml-2">Manhattan, NY</span>
-                            </div>
-                            <p class="text-gray-600 mt-4">High-end 2-bedroom apartment with spectacular city views, modern amenities, and 24/7 concierge service.</p>
-                        </div>
-                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </body>

@@ -74,7 +74,6 @@ public class JobPostController {
             String imageUrl = imageUploadService.uploadImage(file);
             jobPost.getImageUrls().add(imageUrl); // Thêm URL ảnh vào danh sách
         }
-
         jobPostRepository.save(jobPost);
 
         return ResponseDTO.<Void>builder()
@@ -82,7 +81,6 @@ public class JobPostController {
                 .message("Images uploaded successfully")
                 .build();
     }
-
     // Tạo hoặc cập nhật JobPost
     @PostMapping("/upload")
     public ResponseDTO<Void> createOrUpdateJobPost(

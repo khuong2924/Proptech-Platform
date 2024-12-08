@@ -1,6 +1,7 @@
 package khuong.com.lasttermjava.controller;
 
 import khuong.com.lasttermjava.dto.JobPostDTO;
+import khuong.com.lasttermjava.dto.ProfileDTO;
 import khuong.com.lasttermjava.entity.User;
 import khuong.com.lasttermjava.repository.JobPostRepository;
 import khuong.com.lasttermjava.repository.NotificationRepository;
@@ -81,12 +82,22 @@ public class HomeController {
     }
 
     @GetMapping("/account")
-    public String account() {
+    public String account(Model model) {
+        Long userId = SessionUtils.getCurrentUserId();
+        ProfileDTO profileDTO = profileService.getByUserId(userId);
+        model.addAttribute("profile", profileDTO);
+        List<JobPost> jobPosts = jobPostRepository.findByUserId(userId);
+        model.addAttribute("jobPosts", jobPosts);
         return "account";
     }
 
     @GetMapping("/personal-page")
-        public String personalPage() {
+        public String personalPage(Model model) {
+        Long userId = SessionUtils.getCurrentUserId();
+        ProfileDTO profileDTO = profileService.getByUserId(userId);
+        model.addAttribute("profile", profileDTO);
+        List<JobPost> jobPosts = jobPostRepository.findByUserId(userId);
+        model.addAttribute("jobPosts", jobPosts);
         return "personalPage";
         }
 
