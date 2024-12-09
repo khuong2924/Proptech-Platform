@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Estate Profile Listing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-done {
+            background-color: #10B981;
+            color: white;
+        }
+        .status-unpaid {
+            background-color: #EF4444;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100">
+<header class="bg-gradient-to-r from-blue-600 to-purple-600 shadow-xl transition-all duration-500 hover:from-blue-700 hover:to-purple-700">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center space-x-8">
+                <div class="flex items-center">
+                    <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994" alt="Logo" class="h-8 w-auto transition transform hover:scale-105">
+                    <span class="ml-2 text-2xl font-bold text-white">DreamHome</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Home</a>
+                    <a href="#" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Properties</a>
+                    <a href="#" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">About</a>
+                    <a href="#" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Contact</a>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all after:duration-300">Login</button>
+                <div class="relative">
+                    <button onclick="toggleDropdown()" class="w-10 h-10 rounded-full bg-white p-1 hover:shadow-lg transform hover:-translate-y-1 transition duration-300 hover:scale-105 flex items-center justify-center group">
+                        <svg class="w-6 h-6 text-blue-600 group-hover:text-purple-600 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </button>
+                    <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-50 transform transition-all duration-300 ease-in-out">
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Personal Page</a>
+                        <a href="#" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Change Information</a>
+                        <div class="border-t border-gray-100 my-1"></div>
+                        <a href="#" class="block px-4 py-2 text-red-600 hover:bg-red-50 transition duration-200">Log Out</a>
+                    </div>
+                </div>
+                <button class="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white px-6 py-2 rounded-full font-semibold shadow-lg transform hover:-translate-y-1 transition duration-300 hover:scale-105 flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    <span>Post</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+<div class="container mx-auto p-8">
+    <h1 class="text-4xl font-bold mb-8 text-center text-gray-800">
+        <i class="fas fa-home mr-2"></i>Enhanced Estate Profile Listing
+    </h1>
+
+    <div class="mb-8 flex justify-center">
+        <button id="forRentBtn" class="px-6 py-2 bg-blue-500 text-white rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition-colors duration-200">
+            <i class="fas fa-key mr-2"></i>For Rent
+        </button>
+        <button id="forSaleBtn" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition-colors duration-200">
+            <i class="fas fa-tag mr-2"></i>For Sale
+        </button>
+    </div>
+
+    <div class="mb-4">
+        <select id="statusFilter" class="w-full p-2 border rounded-lg">
+            <option value="all">All Statuses</option>
+            <option value="done">Done</option>
+            <option value="unpaid">Unpaid</option>
+        </select>
+    </div>
+
+    <div id="profileList" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <!-- Profile cards will be dynamically inserted here -->
+    </div>
+</div>
+
+<script>
+    const forRentBtn = document.getElementById('forRentBtn');
+    const forSaleBtn = document.getElementById('forSaleBtn');
+    const profileList = document.getElementById('profileList');
+    const statusFilter = document.getElementById('statusFilter');
+
+    const rentProfiles = [
+        { content: "Spacious apartment in downtown", phoneNumber: "123-456-7890", leaseAgreement: "lease1.pdf", depositAmount: "$2000", timePay: "2023-07-01", status: "done" },
+        { content: "Cozy studio near the beach", phoneNumber: "098-765-4321", leaseAgreement: "lease2.pdf", depositAmount: "$1500", timePay: "2023-08-15", status: "unpaid" },
+        { content: "Family home with large backyard", phoneNumber: "555-123-4567", leaseAgreement: "lease3.pdf", depositAmount: "$3000", timePay: "2023-09-01", status: "done" }
+    ];
+
+    const saleProfiles = [
+        { content: "Modern condo with city views", phoneNumber: "111-222-3333", legalPapers: "legal1.pdf", salesContract: "contract1.pdf", paymentStatus: "Paid", status: "done" },
+        { content: "Rustic cabin in the woods", phoneNumber: "444-555-6666", legalPapers: "legal2.pdf", salesContract: "contract2.pdf", paymentStatus: "Unpaid", status: "unpaid" },
+        { content: "Luxury villa with pool", phoneNumber: "777-888-9999", legalPapers: "legal3.pdf", salesContract: "contract3.pdf", paymentStatus: "Paid", status: "done" }
+    ];
+
+    function createRentCard(profile) {
+        return `
+                <div class="bg-white rounded-lg shadow-md p-6 fade-in relative overflow-hidden">
+                    <div class="status-badge ${profile.status === 'done' ? 'status-done' : 'status-unpaid'}">
+                        ${profile.status === 'done' ? 'Done' : 'Unpaid'}
+                    </div>
+                    <h2 class="text-xl font-semibold mb-2">${profile.content}</h2>
+                    <p class="text-gray-600 mb-4"><i class="fas fa-phone-alt mr-2"></i>${profile.phoneNumber}</p>
+                    <div class="space-y-2">
+                        <p><i class="fas fa-file-contract mr-2"></i><span class="font-medium">Lease Agreement:</span> <a href="#" class="text-blue-500 hover:underline">${profile.leaseAgreement}</a></p>
+                        <p><i class="fas fa-money-bill-wave mr-2"></i><span class="font-medium">Deposit Amount:</span> ${profile.depositAmount}</p>
+                        <p><i class="fas fa-calendar-alt mr-2"></i><span class="font-medium">Payment Date:</span> ${profile.timePay}</p>
+                    </div>
+                </div>
+            `;
+    }
+
+    function createSaleCard(profile) {
+        return `
+                <div class="bg-white rounded-lg shadow-md p-6 fade-in relative overflow-hidden">
+                    <div class="status-badge ${profile.status === 'done' ? 'status-done' : 'status-unpaid'}">
+                        ${profile.status === 'done' ? 'Done' : 'Unpaid'}
+                    </div>
+                    <h2 class="text-xl font-semibold mb-2">${profile.content}</h2>
+                    <p class="text-gray-600 mb-4"><i class="fas fa-phone-alt mr-2"></i>${profile.phoneNumber}</p>
+                    <div class="space-y-2">
+                        <p><i class="fas fa-file-alt mr-2"></i><span class="font-medium">Legal Papers:</span> <a href="#" class="text-blue-500 hover:underline">${profile.legalPapers}</a></p>
+                        <p><i class="fas fa-file-signature mr-2"></i><span class="font-medium">Sales Contract:</span> <a href="#" class="text-blue-500 hover:underline">${profile.salesContract}</a></p>
+                        <p><i class="fas fa-money-check-alt mr-2"></i><span class="font-medium">Payment Status:</span> <span class="${profile.paymentStatus === 'Paid' ? 'text-green-500' : 'text-red-500'}">${profile.paymentStatus}</span></p>
+                    </div>
+                </div>
+            `;
+    }
+
+    function displayProfiles(profiles, createCardFunction) {
+        profileList.innerHTML = '';
+        profiles.forEach(profile => {
+            if (statusFilter.value === 'all' || profile.status === statusFilter.value) {
+                profileList.innerHTML += createCardFunction(profile);
+            }
+        });
+    }
+
+    forRentBtn.addEventListener('click', () => {
+        forRentBtn.classList.remove('bg-gray-300', 'text-gray-700');
+        forRentBtn.classList.add('bg-blue-500', 'text-white');
+        forSaleBtn.classList.remove('bg-blue-500', 'text-white');
+        forSaleBtn.classList.add('bg-gray-300', 'text-gray-700');
+        displayProfiles(rentProfiles, createRentCard);
+    });
+
+    forSaleBtn.addEventListener('click', () => {
+        forSaleBtn.classList.remove('bg-gray-300', 'text-gray-700');
+        forSaleBtn.classList.add('bg-blue-500', 'text-white');
+        forRentBtn.classList.remove('bg-blue-500', 'text-white');
+        forRentBtn.classList.add('bg-gray-300', 'text-gray-700');
+        displayProfiles(saleProfiles, createSaleCard);
+    });
+
+    statusFilter.addEventListener('change', () => {
+        if (forRentBtn.classList.contains('bg-blue-500')) {
+            displayProfiles(rentProfiles, createRentCard);
+        } else {
+            displayProfiles(saleProfiles, createSaleCard);
+        }
+    });
+
+    // Initially display rent profiles
+    displayProfiles(rentProfiles, createRentCard);
+
+    // Initialize Select2 for enhanced dropdown
+    $(document).ready(function() {
+        $('#statusFilter').select2({
+            minimumResultsForSearch: Infinity
+        });
+    });
+</script>
+</body>
+</html>
