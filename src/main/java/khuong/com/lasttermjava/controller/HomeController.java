@@ -1,5 +1,6 @@
 package khuong.com.lasttermjava.controller;
 
+import jakarta.jws.WebParam;
 import khuong.com.lasttermjava.dto.JobPostDTO;
 import khuong.com.lasttermjava.dto.ProfileDTO;
 import khuong.com.lasttermjava.entity.User;
@@ -57,6 +58,13 @@ public class HomeController {
         return "homePage";
     }
 
+    @GetMapping("transaction-create/{id}")
+    public String transactionCreate(@PathVariable Long id, Model model) {
+        JobPost jobPost = jobPostRepository.findById(id).get();
+        model.addAttribute("jobPost", jobPost);
+        return "transaction-create";
+    }
+
     @GetMapping("postDetail/{id}")
     public String showJobPostDetail(@PathVariable("id") Long id, Model model) {
         // Giả sử bạn lấy jobPost từ cơ sở dữ liệu
@@ -94,6 +102,10 @@ public class HomeController {
     @GetMapping("/personal-page")
         public String personalPage(Model model) {
         Long userId = SessionUtils.getCurrentUserId();
+        if (userId == null) {
+            model.addAttribute("errors", "Bạn cần đăng nhập để truy cập trang cá nhân");
+            return "error";
+        }
         ProfileDTO profileDTO = profileService.getByUserId(userId);
         model.addAttribute("profile", profileDTO);
         List<JobPost> jobPosts = jobPostRepository.findByUserId(userId);
@@ -107,7 +119,12 @@ public class HomeController {
     }
 
     @GetMapping("upload-post")
-    public String uploadPost() {
+    public String uploadPost(Model model) {
+        Long userId = SessionUtils.getCurrentUserId();
+        if (userId == null) {
+            model.addAttribute("errors", "Bạn cần đăng nhập để thực hiện đăng bài");
+            return "error";
+        }
         return "postListing";
     }
 

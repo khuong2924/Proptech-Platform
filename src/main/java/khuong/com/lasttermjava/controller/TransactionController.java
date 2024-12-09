@@ -122,8 +122,7 @@ public class TransactionController {
                 String imageUrl = imageUploadService.uploadImage(image);
                 imageUrls.add(imageUrl);
             }
-            // Thêm ảnh vào các trường giayToPhapLy, hopDongMuaBan, hopDongThue nếu có
-            transaction.setHopDongThue(imageUrls); // Thêm ảnh vào giayToPhapLy
+            transaction.setHopDongThue(imageUrls);
         }
         transaction.setTienThue(tienThue);
         transaction.setNgayTraDinhKy(ngayTraDinhKy);
