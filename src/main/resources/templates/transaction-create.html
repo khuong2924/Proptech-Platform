@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Real Estate Profile</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Tải jQuery trước -->
+
+    <!-- Thêm Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Thêm Select2 CSS và JS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+
+
     <style>
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -13,6 +27,7 @@
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
         }
+
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen bg-cover bg-center">
@@ -69,34 +84,35 @@
 <div class="container mx-auto p-8 mt-8">
     <div class="bg-white bg-opacity-90 rounded-lg shadow-xl p-8 max-w-2xl mx-auto">
         <h1 class="text-3xl font-bold mb-6 text-gray-800">Tạo mới hồ sơ giao dịch</h1>
-        <form id="profileForm" class="space-y-6">
+        <form id="profileForm" th:action="@{/create-new-transaction/{id}(id=${jobPost.id})}" action="#" method="post" enctype="multipart/form-data" class="space-y-6">
+            <!-- Các trường dữ liệu khác trong form -->
             <div>
-                <label for="content" class="block text-sm font-medium text-gray-700">Nội dung hồ sơ</label>
-                <textarea id="content" name="content" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
+                <label for="noiDung" class="block text-sm font-medium text-gray-700">Nội dung hồ sơ</label>
+                <textarea id="noiDung" name="noiDung" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
             </div>
             <div>
-                <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Số điện thoại khách hàng</label>
-                <input type="tel" id="phoneNumber" name="phoneNumber" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <label for="sdtKhachHang" class="block text-sm font-medium text-gray-700">Số điện thoại khách hàng</label>
+                <input type="tel" id="sdtKhachHang" name="sdtKhachHang" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
             </div>
             <div>
-                <label for="selectionBox" class="block text-sm font-medium text-gray-700">Loại hồ sơ</label>
-                <select id="selectionBox" name="selectionBox" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                    <option value="ban">Bán</option>
-                    <option value="choThue">Cho Thuê</option>
+                <label for="loaiHoSo" class="block text-sm font-medium text-gray-700">Loại hồ sơ</label>
+                <select id="loaiHoSo" name="loaiHoSo" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <option value="Bán" data-icon="fas fa-house-user">Bán</option>
+                    <option value="Cho Thuê" data-icon="fas fa-building">Cho Thuê</option>
                 </select>
             </div>
             <div id="forSaleFields" class="hidden space-y-6 fade-in">
                 <div>
-                    <label for="legalPapers" class="block text-sm font-medium text-gray-700">Legal Papers</label>
-                    <input type="file" id="legalPapers" name="legalPapers" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                    <label for="giayToPhapLy" class="block text-sm font-medium text-gray-700">Giấy tờ pháp lý</label>
+                    <input type="file" id="giayToPhapLy" name="giayToPhapLy" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                 </div>
                 <div>
-                    <label for="salesContract" class="block text-sm font-medium text-gray-700">Sales Contract</label>
-                    <input type="file" id="salesContract" name="salesContract" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                    <label for="hopDongMuaBan" class="block text-sm font-medium text-gray-700">Hợp đồng mua bán</label>
+                    <input type="file" id="hopDongMuaBan" name="hopDongMuaBan" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                 </div>
                 <div>
-                    <label for="paymentStatus" class="block text-sm font-medium text-gray-700">Payment Status</label>
-                    <select id="paymentStatus" name="paymentStatus" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <label for="trangThaiThanhToan" class="block text-sm font-medium text-gray-700">Trạng thái thanh toán</label>
+                    <select id="trangThaiThanhToan" name="trangThaiThanhToan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                         <option value="true">Paid</option>
                         <option value="false">Unpaid</option>
                     </select>
@@ -104,21 +120,27 @@
             </div>
             <div id="forRentFields" class="hidden space-y-6 fade-in">
                 <div>
-                    <label for="leaseAgreement" class="block text-sm font-medium text-gray-700">Lease Agreement</label>
-                    <input type="file" id="leaseAgreement" name="leaseAgreement" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
+                    <label for="hopDongThue" class="block text-sm font-medium text-gray-700">Hợp đồng thuê</label>
+                    <input type="file" id="hopDongThue" name="hopDongThue" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                 </div>
                 <div>
-                    <label for="depositAmount" class="block text-sm font-medium text-gray-700">Deposit Amount</label>
-                    <input type="text" id="depositAmount" name="depositAmount" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <label for="tienThue" class="block text-sm font-medium text-gray-700">Tiền thuê hàng tháng</label>
+                    <input type="number" id="tienThue" name="tienThue" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 </div>
                 <div>
-                    <label for="timePay" class="block text-sm font-medium text-gray-700">Payment Date</label>
-                    <input type="date" id="timePay" name="timePay" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <label for="ngayTraDinhKy" class="block text-sm font-medium text-gray-700">Ngày trả định kỳ</label>
+                    <input type="date" id="ngayTraDinhKy" name="ngayTraDinhKy" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 </div>
             </div>
-            <div>
-                <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Create Profile
+            <div class="flex justify-end">
+                <button  type="submit"
+                         class="px-8 py-3 border border-transparent rounded-lg shadow-lg text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Tạo mới hồ sơ
+                    </div>
                 </button>
             </div>
         </form>
@@ -126,12 +148,12 @@
 </div>
 
 <script>
-    const selectionBox = document.getElementById('selectionBox');
+    const selectionBox = document.getElementById('loaiHoSo');
     const forSaleFields = document.getElementById('forSaleFields');
     const forRentFields = document.getElementById('forRentFields');
 
     selectionBox.addEventListener('change', function() {
-        if (this.value === 'ban') {
+        if (this.value === 'Bán') {
             forSaleFields.classList.remove('hidden');
             forRentFields.classList.add('hidden');
         } else {
@@ -140,12 +162,6 @@
         }
     });
 
-    document.getElementById('profileForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        // Here you would typically send the form data to a server
-        console.log('Form submitted!');
-        alert('Profile created successfully!');
-    });
 </script>
 </body>
 </html>

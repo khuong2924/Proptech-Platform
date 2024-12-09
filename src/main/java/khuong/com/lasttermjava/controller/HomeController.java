@@ -3,11 +3,10 @@ package khuong.com.lasttermjava.controller;
 import jakarta.jws.WebParam;
 import khuong.com.lasttermjava.dto.JobPostDTO;
 import khuong.com.lasttermjava.dto.ProfileDTO;
+import khuong.com.lasttermjava.dto.ResponseDTO;
+import khuong.com.lasttermjava.entity.Transaction;
 import khuong.com.lasttermjava.entity.User;
-import khuong.com.lasttermjava.repository.JobPostRepository;
-import khuong.com.lasttermjava.repository.NotificationRepository;
-import khuong.com.lasttermjava.repository.ProfileRepository;
-import khuong.com.lasttermjava.repository.UserRepository;
+import khuong.com.lasttermjava.repository.*;
 import khuong.com.lasttermjava.service.ImageUploadService;
 import khuong.com.lasttermjava.service.JobPostService;
 import khuong.com.lasttermjava.service.ProfileService;
@@ -23,8 +22,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class HomeController {
@@ -42,6 +44,8 @@ public class HomeController {
     private ProfileRepository profileRepository;
     @Autowired
     private ImageUploadService imageUploadService;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     public HomeController(ProfileService profileService, JobPostRepository jobPostRepository, NotificationRepository notificationRepository, UserRepository userRepository, JobPostService jobPostService) {
         this.profileService = profileService;
@@ -58,15 +62,15 @@ public class HomeController {
         return "homePage";
     }
 
-    @GetMapping("transaction-create/{id}")
-    public String transactionCreate(@PathVariable Long id, Model model) {
-        JobPost jobPost = jobPostRepository.findById(id).get();
-        model.addAttribute("jobPost", jobPost);
-        return "transaction-create";
-    }
+
 
     @GetMapping("postDetail/{id}")
     public String showJobPostDetail(@PathVariable("id") Long id, Model model) {
+        Long userId = SessionUtils.getCurrentUserId();
+        if (userId == null) {
+            model.addAttribute("errors", "Bạn cần đăng nhập để truy cập thông tin cụ thể của bài đăng");
+            return "error";
+        }
         // Giả sử bạn lấy jobPost từ cơ sở dữ liệu
         JobPost jobPost = jobPostRepository.findById(id).get();
         model.addAttribute("jobPost", jobPost);
@@ -198,7 +202,142 @@ public class HomeController {
         }
     }
 
+    @GetMapping("transaction-create/{id}")
+    public String transactionCreate(@PathVariable Long id, Model model) {
+        JobPost jobPost = jobPostRepository.findById(id).get();
+        model.addAttribute("jobPost", jobPost);
+        model.addAttribute("jobPostId", id);
 
+        return "transaction-create";
+    }
+//
+//    @PostMapping("/create-new-transaction/{id}")
+//    public String createOrUpdateTransaction(
+//            @PathVariable("id") Long id,
+//            @RequestParam("noiDung") String noiDung,
+//            @RequestParam("sdtKhachHang") String sdtKhachHang,
+//            @RequestParam("loaiHoSo") String loaiHoSo,
+//            @RequestParam("giayToPhapLy") List<MultipartFile> giayToPhapLy,
+//            @RequestParam("hopDongMuaBan") List<MultipartFile> hopDongMuaBan,
+//            @RequestParam("trangThaiThanhToan") Boolean trangThaiThanhToan,
+//            @RequestParam("hopDongThue") List<MultipartFile> hopDongThue,
+//            @RequestParam("tienThue") BigDecimal tienThue,
+//            @RequestParam("ngayTraDinhKy") String ngayTraDinhKy) throws IOException {
+//
+//        // Lấy JobPost
+//        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(() -> new RuntimeException("Job post not found"));
+//
+//        // Tạo hoặc cập nhật Transaction
+//        Transaction transaction = new Transaction();
+//        transaction.setJobPost(jobPost);
+//        transaction.setNoiDung(noiDung);
+//        transaction.setSdtKhachHang(sdtKhachHang);
+//        transaction.setLoaiHoSo(loaiHoSo);
+//        transaction.setTrangThaiGiaoDich(false);
+//
+//        if (giayToPhapLy != null && !giayToPhapLy.isEmpty()) {
+//            Set<String> imageUrls = new HashSet<>();
+//            for (MultipartFile image : giayToPhapLy) {
+//                String imageUrl = imageUploadService.uploadImage(image);
+//                imageUrls.add(imageUrl);
+//            }
+//            transaction.setGiayToPhapLy(imageUrls);
+//        }
+//
+//        if (hopDongMuaBan != null && !hopDongMuaBan.isEmpty()) {
+//            Set<String> imageUrls = new HashSet<>();
+//            for (MultipartFile image : hopDongMuaBan) {
+//                String imageUrl = imageUploadService.uploadImage(image);
+//                imageUrls.add(imageUrl);
+//            }
+//            transaction.setHopDongMuaBan(imageUrls);
+//        }
+//
+//        transaction.setTrangThaiThanhToan(trangThaiThanhToan);
+//        if (hopDongThue != null && !hopDongThue.isEmpty()) {
+//            Set<String> imageUrls = new HashSet<>();
+//            for (MultipartFile image : hopDongThue) {
+//                String imageUrl = imageUploadService.uploadImage(image);
+//                imageUrls.add(imageUrl);
+//            }
+//            transaction.setHopDongThue(imageUrls);
+//        }
+//        transaction.setTienThue(tienThue);
+//        transaction.setNgayTraDinhKy(ngayTraDinhKy);
+//
+//        transactionRepository.save(transaction);
+//
+//        return "redirect:/home";
+//    }
+
+    @PostMapping("/create-new-transaction/{id}")
+    public String createOrUpdateTransaction(
+            @PathVariable("id") Long id,
+            @RequestParam("noiDung") String noiDung,
+            @RequestParam("sdtKhachHang") String sdtKhachHang,
+            @RequestParam("loaiHoSo") String loaiHoSo,
+            @RequestParam("giayToPhapLy") List<MultipartFile> giayToPhapLy,
+            @RequestParam("hopDongMuaBan") List<MultipartFile> hopDongMuaBan,
+            @RequestParam("trangThaiThanhToan") Boolean trangThaiThanhToan,
+            @RequestParam("hopDongThue") List<MultipartFile> hopDongThue,
+            @RequestParam("tienThue") BigDecimal tienThue,
+            @RequestParam("ngayTraDinhKy") String ngayTraDinhKy) throws IOException {
+
+        // Lấy JobPost
+        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(() -> new RuntimeException("Job post not found"));
+
+        // Tạo hoặc cập nhật Transaction
+        Transaction transaction = new Transaction();
+        transaction.setJobPost(jobPost);
+        transaction.setNoiDung(noiDung);
+        transaction.setSdtKhachHang(sdtKhachHang);
+        transaction.setLoaiHoSo(loaiHoSo);
+        transaction.setTrangThaiGiaoDich(false);
+
+        // Kiểm tra giayToPhapLy
+        if (giayToPhapLy != null && !giayToPhapLy.isEmpty()) {
+            Set<String> imageUrls = new HashSet<>();
+            for (MultipartFile image : giayToPhapLy) {
+                if (!image.isEmpty()) {
+                    String imageUrl = imageUploadService.uploadImage(image);
+                    imageUrls.add(imageUrl);
+                }
+            }
+            transaction.setGiayToPhapLy(imageUrls);
+        }
+
+        // Kiểm tra hopDongMuaBan
+        if (hopDongMuaBan != null && !hopDongMuaBan.isEmpty()) {
+            Set<String> imageUrls = new HashSet<>();
+            for (MultipartFile image : hopDongMuaBan) {
+                if (!image.isEmpty()) {
+                    String imageUrl = imageUploadService.uploadImage(image);
+                    imageUrls.add(imageUrl);
+                }
+            }
+            transaction.setHopDongMuaBan(imageUrls);
+        }
+
+        // Kiểm tra hopDongThue
+        if (hopDongThue != null && !hopDongThue.isEmpty()) {
+            Set<String> imageUrls = new HashSet<>();
+            for (MultipartFile image : hopDongThue) {
+                if (!image.isEmpty()) {
+                    String imageUrl = imageUploadService.uploadImage(image);
+                    imageUrls.add(imageUrl);
+                }
+            }
+            transaction.setHopDongThue(imageUrls);
+        }
+
+        transaction.setTrangThaiThanhToan(trangThaiThanhToan);
+        transaction.setTienThue(tienThue);
+        transaction.setNgayTraDinhKy(ngayTraDinhKy);
+
+        transactionRepository.save(transaction);
+
+        return "redirect:/home";
+    }
 
 
 }
