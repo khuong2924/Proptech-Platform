@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class LoginController {
 
     @Autowired
-    private UserService userService;
+    UserService userService;
 
-    @Autowired
-    private UserRepository userRepository;
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login"; // Hiển thị trang đăng nhập
+    }
 
     @PostMapping("/login")
     public String handleLogin(@RequestParam String username, @RequestParam String password, Model model, HttpServletRequest request) {
@@ -38,7 +40,7 @@ public class LoginController {
             model.addAttribute("error", "Tên đăng nhập hoặc mật khẩu không đúng");
             return "login";
         }
-}
+    }
 
 
 
@@ -57,3 +59,4 @@ public class LoginController {
         return "checkSession";
     }
 }
+

@@ -1,6 +1,5 @@
 package khuong.com.lasttermjava.service;
 
-
 import jakarta.transaction.Transactional;
 import khuong.com.lasttermjava.dto.UserDTO;
 import khuong.com.lasttermjava.entity.Profile;
@@ -9,7 +8,6 @@ import khuong.com.lasttermjava.repository.ProfileRepository;
 import khuong.com.lasttermjava.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,8 @@ public class UserService {
 
     @Transactional
     public User createUser(User user) {
-        // Lưu user mới
+        // Lưu user mới mà không mã hóa mật khẩu
+        user.setPassword(user.getPassword());  // Không mã hóa mật khẩu
         User savedUser = userRepo.save(user);
 
         // Tạo profile rỗng tương ứng với user
@@ -62,7 +61,7 @@ public class UserService {
     public void create(UserDTO userDTO) {
         User user = new User();
         user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
+        user.setPassword(userDTO.getPassword());  // Không mã hóa mật khẩu
         user.setRole(userDTO.getRole());
         user.setPremium(userDTO.isPremium());
         userRepo.save(user);
@@ -75,7 +74,7 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         user.setUsername(userDTO.getUsername());
-        user.setPassword(userDTO.getPassword());
+        user.setPassword(userDTO.getPassword());  // Không mã hóa mật khẩu
         user.setRole(userDTO.getRole());
         user.setPremium(userDTO.isPremium());
         userRepo.save(user);
@@ -94,24 +93,28 @@ public class UserService {
         userRepo.deleteById(id);
     }
 
+    // Kiểm tra đăng nhập mà không mã hóa mật khẩu
     public boolean validateUser(String username, String password) {
         Optional<User> optionalUser = userRepo.findByUsername(username);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (user.getPassword().equals(password)) {
+            // So sánh trực tiếp mật khẩu
+            if (password.equals(user.getPassword())) {
                 return true;
             }
         }
         return false;
     }
 
+    // Lấy user mà không kiểm tra mã hóa mật khẩu
     public User validateGetUser(String username, String password) {
         Optional<User> optionalUser = userRepo.findByUsername(username);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (user.getPassword().equals(password)) {
+            // So sánh trực tiếp mật khẩu
+            if (password.equals(user.getPassword())) {
                 return user;
             }
         }

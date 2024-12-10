@@ -14,8 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/transaction")
@@ -134,4 +136,44 @@ public class TransactionController {
                 .message("Transaction created or updated successfully")
                 .build();
     }
+//    @GetMapping("/rent")
+//    public List<Map<String, Object>> getRentProfiles() {
+//        List<Transaction> rentTransactions = transactionRepository.findAll()
+//                .stream()
+//                .filter(transaction -> "rent".equalsIgnoreCase(transaction.getLoaiHoSo()))
+//                .collect(Collectors.toList());
+//
+//        return rentTransactions.stream()
+//                .map(transaction -> Map.of(
+//                        "content", transaction.getNoiDung(),
+//                        "phoneNumber", transaction.getSdtKhachHang(),
+//                        "leaseAgreement", transaction.getHopDongThue(),
+//                        "depositAmount", transaction.getTienThue(),
+//                        "timePay", transaction.getNgayTraDinhKy(),
+//                        "status", transaction.getTrangThaiGiaoDich() ? "done" : "unpaid"
+//                ))
+//                .collect(Collectors.toList());
+//    }
+//
+//
+//    @GetMapping("/sale")
+//    public List<Map<String, Object>> getSaleProfiles() {
+//        List<Transaction> saleTransactions = transactionRepository.findAll()
+//                .stream()
+//                .filter(transaction -> "sale".equalsIgnoreCase(transaction.getLoaiHoSo()))
+//                .collect(Collectors.toList());
+//
+//        return saleTransactions.stream()
+//                .map(transaction -> Map.of(
+//                        "content", transaction.getNoiDung(),
+//                        "phoneNumber", transaction.getSdtKhachHang(),
+//                        "legalPapers", transaction.getGiayToPhapLy(),
+//                        "salesContract", transaction.getHopDongMuaBan(),
+//                        "paymentStatus", transaction.getTrangThaiThanhToan() ? "Paid" : "Unpaid",
+//                        "status", transaction.getTrangThaiGiaoDich() ? "done" : "unpaid"
+//                ))
+//                .collect(Collectors.toList());
+//    }
+
+
 }

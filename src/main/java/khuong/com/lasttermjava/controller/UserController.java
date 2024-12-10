@@ -24,7 +24,7 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseDTO<List<UserDTO>> getAll() {
         ResponseDTO<List<UserDTO>> responseDTO = new ResponseDTO<>();
         responseDTO.setData(userService.getAll());
@@ -32,7 +32,7 @@ public class UserController {
         return responseDTO;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseDTO<Void> create(@RequestBody UserDTO userDTO) {
         userService.create(userDTO);
         ResponseDTO<Void> response = ResponseDTO.<Void>builder()
@@ -66,5 +66,4 @@ public class UserController {
         model.addAttribute("users", users);
         return "users";
     }
-
 }

@@ -40,16 +40,14 @@
                     <span class="ml-2 text-2xl font-bold text-white">DreamHome</span>
                 </div>
                 <div class="hidden md:flex space-x-6">
-                    <a href="#" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Home</a>
-                    <a href="#" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Properties</a>
-                    <a href="#" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">About</a>
-                    <a href="#" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Contact</a>
+                    <a href="/home" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Trang chủ</a>
+                    <a href="#" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Liên hệ</a>
                 </div>
             </div>
             <div class="flex items-center space-x-4">
                 <form action="/login" method="get">
                     <button type="submit" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all after:duration-300">
-                        Login
+                        Đăng nhập
                     </button>
                 </form>
 
@@ -60,10 +58,12 @@
                         </svg>
                     </button>
                     <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-50 transform transition-all duration-300 ease-in-out">
-                        <a href="/personal-page" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Personal Page</a>
-                        <a href="/account" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Change Information</a>
+                        <a href="/personal-page" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Trang cá nhân</a>
+                        <a href="/transaction-page" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Quản lý hồ sơ</a>
+
+                        <a href="/account" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Chỉnh sửa thông tin</a>
                         <div class="border-t border-gray-100 my-1"></div>
-                        <a href="#" class="block px-4 py-2 text-red-600 hover:bg-red-50 transition duration-200">Log Out</a>
+                        <a href="#" class="block px-4 py-2 text-red-600 hover:bg-red-50 transition duration-200">Đăng xuất</a>
                     </div>
                 </div>
                 <form action="/upload-post" method="get">
@@ -71,13 +71,14 @@
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                         </svg>
-                        <span>Post</span>
+                        <span>Đăng bài</span>
                     </button>
                 </form>
             </div>
         </div>
     </nav>
 </header>
+
 
 
 

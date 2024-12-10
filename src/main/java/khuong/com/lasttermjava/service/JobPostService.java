@@ -138,13 +138,7 @@ public class JobPostService {
                 .orElseThrow(() -> new RuntimeException("Job post not found"));
         jobPostRepository.deleteById(id);
     }
-
     public List<JobPost> getByUserId(Long userId) {
         return jobPostRepository.findByUserId(userId);
     }
-
-
-//    public List<JobPost> searchJobPosts(String jobType, LocalDateTime date, BigDecimal startSalary, BigDecimal endSalary) {
-//        return jobPostRepository.searchJobPosts(jobType, date, startSalary, endSalary);
-//    }
 }

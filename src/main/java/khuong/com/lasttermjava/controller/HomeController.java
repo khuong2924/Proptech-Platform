@@ -4,6 +4,7 @@ import jakarta.jws.WebParam;
 import khuong.com.lasttermjava.dto.JobPostDTO;
 import khuong.com.lasttermjava.dto.ProfileDTO;
 import khuong.com.lasttermjava.dto.ResponseDTO;
+import khuong.com.lasttermjava.entity.Profile;
 import khuong.com.lasttermjava.entity.Transaction;
 import khuong.com.lasttermjava.entity.User;
 import khuong.com.lasttermjava.repository.*;
@@ -73,7 +74,10 @@ public class HomeController {
         }
         // Giả sử bạn lấy jobPost từ cơ sở dữ liệu
         JobPost jobPost = jobPostRepository.findById(id).get();
+        User user = userRepository.findById(jobPost.getUser().getId()).orElse(null);
+        Profile profile = profileRepository.findByUserId(user.getId()).get();
         model.addAttribute("jobPost", jobPost);
+        model.addAttribute("profile", profile);
         return "postDetail";
     }
 
@@ -103,6 +107,7 @@ public class HomeController {
         return "account";
     }
 
+
     @GetMapping("/personal-page")
         public String personalPage(Model model) {
         Long userId = SessionUtils.getCurrentUserId();
@@ -117,10 +122,33 @@ public class HomeController {
         return "personalPage";
         }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
+
+    @GetMapping("/transaction-page")
+    public String transactionPage(Model model) {
+        Long userId = SessionUtils.getCurrentUserId();
+        if (userId == null) {
+            model.addAttribute("errors", "Bạn cần đăng nhập để trang quản lý giao dịch");
+            return "error";
+        }
+        ProfileDTO profileDTO = profileService.getByUserId(userId);
+        model.addAttribute("profile", profileDTO);
+        List<JobPost> jobPosts = jobPostRepository.findByUserId(userId);
+        model.addAttribute("jobPosts", jobPosts);
+        List<Transaction> transactions = transactionRepository.findAll();
+        model.addAttribute("transactions", transactions);
+
+        List<Transaction> saleTransactions = transactionRepository.findByLoaiHoSo("Bán");
+        model.addAttribute("saleTransactions", saleTransactions);
+
+        List<Transaction> rentTransactions = transactionRepository.findByLoaiHoSo("Cho thuê");
+        model.addAttribute("rentTransactions", rentTransactions);
+        return "transaction-detail";
     }
+
+//    @GetMapping("/login")
+//    public String login() {
+//        return "login";
+//    }
 
     @GetMapping("upload-post")
     public String uploadPost(Model model) {
@@ -188,8 +216,6 @@ public class HomeController {
                     jobPost.getImageUrls().add(imagePath); // Thêm imagePath vào HashSet
                 }
             }
-
-
             jobPostRepository.save(jobPost);
 
             redirectAttributes.addFlashAttribute("message", "Job post created successfully!");
@@ -210,65 +236,6 @@ public class HomeController {
 
         return "transaction-create";
     }
-//
-//    @PostMapping("/create-new-transaction/{id}")
-//    public String createOrUpdateTransaction(
-//            @PathVariable("id") Long id,
-//            @RequestParam("noiDung") String noiDung,
-//            @RequestParam("sdtKhachHang") String sdtKhachHang,
-//            @RequestParam("loaiHoSo") String loaiHoSo,
-//            @RequestParam("giayToPhapLy") List<MultipartFile> giayToPhapLy,
-//            @RequestParam("hopDongMuaBan") List<MultipartFile> hopDongMuaBan,
-//            @RequestParam("trangThaiThanhToan") Boolean trangThaiThanhToan,
-//            @RequestParam("hopDongThue") List<MultipartFile> hopDongThue,
-//            @RequestParam("tienThue") BigDecimal tienThue,
-//            @RequestParam("ngayTraDinhKy") String ngayTraDinhKy) throws IOException {
-//
-//        // Lấy JobPost
-//        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(() -> new RuntimeException("Job post not found"));
-//
-//        // Tạo hoặc cập nhật Transaction
-//        Transaction transaction = new Transaction();
-//        transaction.setJobPost(jobPost);
-//        transaction.setNoiDung(noiDung);
-//        transaction.setSdtKhachHang(sdtKhachHang);
-//        transaction.setLoaiHoSo(loaiHoSo);
-//        transaction.setTrangThaiGiaoDich(false);
-//
-//        if (giayToPhapLy != null && !giayToPhapLy.isEmpty()) {
-//            Set<String> imageUrls = new HashSet<>();
-//            for (MultipartFile image : giayToPhapLy) {
-//                String imageUrl = imageUploadService.uploadImage(image);
-//                imageUrls.add(imageUrl);
-//            }
-//            transaction.setGiayToPhapLy(imageUrls);
-//        }
-//
-//        if (hopDongMuaBan != null && !hopDongMuaBan.isEmpty()) {
-//            Set<String> imageUrls = new HashSet<>();
-//            for (MultipartFile image : hopDongMuaBan) {
-//                String imageUrl = imageUploadService.uploadImage(image);
-//                imageUrls.add(imageUrl);
-//            }
-//            transaction.setHopDongMuaBan(imageUrls);
-//        }
-//
-//        transaction.setTrangThaiThanhToan(trangThaiThanhToan);
-//        if (hopDongThue != null && !hopDongThue.isEmpty()) {
-//            Set<String> imageUrls = new HashSet<>();
-//            for (MultipartFile image : hopDongThue) {
-//                String imageUrl = imageUploadService.uploadImage(image);
-//                imageUrls.add(imageUrl);
-//            }
-//            transaction.setHopDongThue(imageUrls);
-//        }
-//        transaction.setTienThue(tienThue);
-//        transaction.setNgayTraDinhKy(ngayTraDinhKy);
-//
-//        transactionRepository.save(transaction);
-//
-//        return "redirect:/home";
-//    }
 
     @PostMapping("/create-new-transaction/{id}")
     public String createOrUpdateTransaction(
@@ -338,7 +305,5 @@ public class HomeController {
 
         return "redirect:/home";
     }
-
-
 }
 
