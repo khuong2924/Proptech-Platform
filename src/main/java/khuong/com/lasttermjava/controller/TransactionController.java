@@ -34,7 +34,7 @@ public class TransactionController {
     private NotificationRepository notificationRepository;
 
 
-    @GetMapping
+    @GetMapping("/getAll")
     public ResponseDTO<List<Transaction>> getAllTransactions() {
         ResponseDTO<List<Transaction>> response = new ResponseDTO<>();
         response.setData(transactionRepository.findAll());

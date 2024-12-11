@@ -74,8 +74,8 @@
                                 <!-- Lặp qua danh sách notifications -->
                                 <li th:each="noti : ${listNotis}" class="bg-white p-4 rounded shadow">
                                     <!-- Tạo liên kết tới postDetail với jobPost.id -->
-                                    <a th:href="@{/postDetail/{id}(id=${noti.jobPost.id})}" class="block">
-                                        <p class="font-semibold" th:text="${noti.user.username}">John Doe</p>
+                                    <a th:href="@{/transaction/{id}(id=${noti.jobPost.id})}" class="block">
+                                        <p class="font-semibold" th:text="${noti.user.profile.fullName}">John Doe</p>
                                         <p class="text-sm text-gray-600 mb-2" th:text="${noti.content}">Requested a property viewing for Spacious apartment in downtown.</p>
                                     </a>
                                     <div class="flex space-x-2">

@@ -361,6 +361,20 @@ public class HomeController {
 
     }
 
+    @GetMapping("/transaction/{id}")
+    public String transaction(@PathVariable Long id, Model model) {
+        Long userId = SessionUtils.getCurrentUserId();
+        boolean checkUser = userId != null;
+        List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
+        model.addAttribute("listNotis", listNotis);
+        model.addAttribute("checkUser", checkUser);
+
+
+        Transaction transaction = transactionRepository.findById(id).get();
+        model.addAttribute("transaction", transaction);
+        return "transaction";
+    }
+
 
 }
 
