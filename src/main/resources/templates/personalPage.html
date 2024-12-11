@@ -24,15 +24,57 @@
                 </div>
                 <div class="hidden md:flex space-x-6">
                     <a href="/home" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Trang chủ</a>
-                    <a href="#" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Liên hệ</a>
+                    <a href="#footer" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Liên hệ</a>
                 </div>
             </div>
             <div class="flex items-center space-x-4">
-                <form action="/login" method="get">
-                    <button type="submit" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all after:duration-300">
+                <!--                    <form th:if="${!checkUser}" action="/login" method="get">-->
+                <!--                        <button type="submit" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all after:duration-300">-->
+                <!--                            Đăng nhập-->
+                <!--                        </button>-->
+                <!--                    </form>-->
+
+                <a th:if="${!(checkUser ?: false)}" href="/login">
+                    <button class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all after:duration-300">
                         Đăng nhập
                     </button>
-                </form>
+                </a>
+                <a>
+                    <button id="notificationBtn"  class="w-10 h-10 rounded-full bg-white p-1 hover:shadow-lg transform hover:-translate-y-1 transition duration-300 hover:scale-105 flex items-center justify-center group">
+                        <i class="fas fa-bell text-blue-600 group-hover:text-purple-600 text-lg"></i>
+                    </button>
+                </a>
+
+                <div id="notificationContent" class="hidden">
+                    <div class="p-4 max-w-sm">
+                        <h3 class="text-lg font-semibold mb-4">Thông báo</h3>
+                        <ul class="space-y-4">
+                            <!-- Lặp qua danh sách notifications -->
+                            <li th:each="noti : ${listNotis}" class="bg-white p-4 rounded shadow">
+                                <!-- Tạo liên kết tới postDetail với jobPost.id -->
+                                <a th:href="@{/postDetail/{id}(id=${noti.jobPost.id})}" class="block">
+                                    <p class="font-semibold" th:text="${noti.user.username}">John Doe</p>
+                                    <p class="text-sm text-gray-600 mb-2" th:text="${noti.content}">Requested a property viewing for Spacious apartment in downtown.</p>
+                                </a>
+                                <div class="flex space-x-2">
+
+                                    <form th:action="@{/refuseTrans/{id}(id=${noti.transaction.id})}" method="POST">
+                                        <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600">
+                                            Từ chối
+                                        </button>
+                                    </form>
+
+                                    <form th:action="@{/updateTrans/{id}(id=${noti.transaction.id})}" method="POST">
+                                        <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
+                                            Xác nhận
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
                 <div class="relative">
                     <button onclick="toggleDropdown()" class="w-10 h-10 rounded-full bg-white p-1 hover:shadow-lg transform hover:-translate-y-1 transition duration-300 hover:scale-105 flex items-center justify-center group">
@@ -61,7 +103,6 @@
         </div>
     </nav>
 </header>
-
 
 
 

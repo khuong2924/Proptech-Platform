@@ -73,6 +73,10 @@ public class HomeController {
         Profile profile = profileRepository.findByUserId(user.getId()).get();
         model.addAttribute("jobPost", jobPost);
         model.addAttribute("profile", profile);
+        boolean checkUser = true;
+        List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
+        model.addAttribute("listNotis", listNotis);
+        model.addAttribute("checkUser", checkUser);
         return "postDetail";
     }
 
@@ -81,19 +85,16 @@ public class HomeController {
         List<JobPost> jobPosts = jobPostRepository.findAll();
         Long userId = SessionUtils.getCurrentUserId();
         boolean checkUser = userId != null;
+        List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
+        model.addAttribute("listNotis", listNotis);
+        model.addAttribute("jobPosts", jobPosts);
+        model.addAttribute("checkUser", checkUser);
 
         //        List<ApplyInfo> infos = applyInfoRepository.findAllByJobPostUserId(userId);
 //        model.addAttribute("infos", infos);
 
         // Sort the list based on the createdAt field
 //        jobPosts.sort((jobPost1, jobPost2) -> jobPost2.getCreatedAt().compareTo(jobPost1.getCreatedAt()));
-        List<Notification> listNotis = notificationRepository.findAll();
-        model.addAttribute("listNotis", listNotis);
-
-        model.addAttribute("jobPosts", jobPosts);
-        model.addAttribute("checkUser", checkUser);
-
-
 
         return "homePage";
     }
@@ -105,6 +106,10 @@ public class HomeController {
         model.addAttribute("profile", profileDTO);
         List<JobPost> jobPosts = jobPostRepository.findByUserId(userId);
         model.addAttribute("jobPosts", jobPosts);
+        boolean checkUser = userId != null;
+        List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
+        model.addAttribute("listNotis", listNotis);
+        model.addAttribute("checkUser", checkUser);
         return "account";
     }
 
@@ -120,6 +125,11 @@ public class HomeController {
         model.addAttribute("profile", profileDTO);
         List<JobPost> jobPosts = jobPostRepository.findByUserId(userId);
         model.addAttribute("jobPosts", jobPosts);
+
+        boolean checkUser = true;
+        List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
+        model.addAttribute("listNotis", listNotis);
+        model.addAttribute("checkUser", checkUser);
         return "personalPage";
         }
 
@@ -137,12 +147,16 @@ public class HomeController {
         model.addAttribute("jobPosts", jobPosts);
         List<Transaction> transactions = transactionRepository.findAll();
         model.addAttribute("transactions", transactions);
-
         List<Transaction> saleTransactions = transactionRepository.findByLoaiHoSo("Bán");
         model.addAttribute("saleTransactions", saleTransactions);
 
         List<Transaction> rentTransactions = transactionRepository.findByLoaiHoSo("Cho thuê");
         model.addAttribute("rentTransactions", rentTransactions);
+
+        boolean checkUser = true;
+        List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
+        model.addAttribute("listNotis", listNotis);
+        model.addAttribute("checkUser", checkUser);
         return "transaction-detail";
     }
 
@@ -158,6 +172,10 @@ public class HomeController {
             model.addAttribute("errors", "Bạn cần đăng nhập để thực hiện đăng bài");
             return "error";
         }
+        boolean checkUser = true;
+        List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
+        model.addAttribute("listNotis", listNotis);
+        model.addAttribute("checkUser", checkUser);
         return "postListing";
     }
 
@@ -234,6 +252,10 @@ public class HomeController {
         JobPost jobPost = jobPostRepository.findById(id).get();
         model.addAttribute("jobPost", jobPost);
         model.addAttribute("jobPostId", id);
+        boolean checkUser = true;
+        List<Notification> listNotis = notificationRepository.findAll();
+        model.addAttribute("listNotis", listNotis);
+        model.addAttribute("checkUser", checkUser);
 
         return "transaction-create";
     }

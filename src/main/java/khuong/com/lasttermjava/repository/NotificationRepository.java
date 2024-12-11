@@ -21,6 +21,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     Optional<Notification> findByTransaction(Transaction transaction);
 
+    List<Notification> findByUser(User user);
+
 //
 //    @Query("SELECT n FROM Notification n ORDER BY n.isFlagged DESC, n.jobPost.start DESC")
 //    List<Notification> findAllSorted();

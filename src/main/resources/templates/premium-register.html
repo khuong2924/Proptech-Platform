@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light.css">
+    <style>
+        body { font-family: "Poppins", sans-serif; }
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-done {
+            background-color: #10B981;
+            color: white;
+        }
+        .status-unpaid {
+            background-color: #EF4444;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100">
+<header class="bg-gradient-to-r from-blue-600 to-purple-600 shadow-xl transition-all duration-500 hover:from-blue-700 hover:to-purple-700">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center space-x-8">
+                <div class="flex items-center">
+                    <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994" alt="Logo" class="h-8 w-auto transition transform hover:scale-105">
+                    <span class="ml-2 text-2xl font-bold text-white">DreamHome</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="/home" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Trang chủ</a>
+                    <a href="#footer" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Liên hệ</a>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!--                    <form th:if="${!checkUser}" action="/login" method="get">-->
+                <!--                        <button type="submit" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all after:duration-300">-->
+                <!--                            Đăng nhập-->
+                <!--                        </button>-->
+                <!--                    </form>-->
+
+                <a th:if="${!(checkUser ?: false)}" href="/login">
+                    <button class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all after:duration-300">
+                        Đăng nhập
+                    </button>
+                </a>
+                <a>
+                    <button id="notificationBtn"  class="w-10 h-10 rounded-full bg-white p-1 hover:shadow-lg transform hover:-translate-y-1 transition duration-300 hover:scale-105 flex items-center justify-center group">
+                        <i class="fas fa-bell text-blue-600 group-hover:text-purple-600 text-lg"></i>
+                    </button>
+                </a>
+
+                <div id="notificationContent" class="hidden">
+                    <div class="p-4 max-w-sm">
+                        <h3 class="text-lg font-semibold mb-4">Thông báo</h3>
+                        <ul class="space-y-4">
+                            <!-- Lặp qua danh sách notifications -->
+                            <li th:each="noti : ${listNotis}" class="bg-white p-4 rounded shadow">
+                                <!-- Tạo liên kết tới postDetail với jobPost.id -->
+                                <a th:href="@{/postDetail/{id}(id=${noti.jobPost.id})}" class="block">
+                                    <p class="font-semibold" th:text="${noti.user.username}">John Doe</p>
+                                    <p class="text-sm text-gray-600 mb-2" th:text="${noti.content}">Requested a property viewing for Spacious apartment in downtown.</p>
+                                </a>
+                                <div class="flex space-x-2">
+
+                                    <form th:action="@{/refuseTrans/{id}(id=${noti.transaction.id})}" method="POST">
+                                        <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600">
+                                            Từ chối
+                                        </button>
+                                    </form>
+
+                                    <form th:action="@{/updateTrans/{id}(id=${noti.transaction.id})}" method="POST">
+                                        <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
+                                            Xác nhận
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+
+                <div class="relative">
+                    <button onclick="toggleDropdown()" class="w-10 h-10 rounded-full bg-white p-1 hover:shadow-lg transform hover:-translate-y-1 transition duration-300 hover:scale-105 flex items-center justify-center group">
+                        <svg class="w-6 h-6 text-blue-600 group-hover:text-purple-600 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </button>
+                    <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-50 transform transition-all duration-300 ease-in-out">
+                        <a href="/personal-page" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Trang cá nhân</a>
+                        <a href="/transaction-page" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Quản lý hồ sơ</a>
+
+                        <a href="/account" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Chỉnh sửa thông tin</a>
+                        <div class="border-t border-gray-100 my-1"></div>
+                        <a href="#" class="block px-4 py-2 text-red-600 hover:bg-red-50 transition duration-200">Đăng xuất</a>
+                    </div>
+                </div>
+                <form action="/upload-post" method="get">
+                    <button type="submit" class="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white px-6 py-2 rounded-full font-semibold shadow-lg transform hover:-translate-y-1 transition duration-300 hover:scale-105 flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        <span>Đăng bài</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+<div class="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden mt-8">
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600  p-6 text-white">
+        <h1 class="text-3xl font-extrabold text-center flex items-center justify-center">
+            <i data-feather="crown" class="mr-2"></i>
+            Đăng ký tài khoản Premium
+        </h1>
+    </div>
+
+    <div class="p-8">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Đặc quyền cho tài khoản Premium</h2>
+        <ul class="space-y-4 mb-8" id="benefits-list">
+            <li class="flex items-center benefit-item">
+                <i data-feather="check-circle" class="text-green-500 mr-3"></i>
+                <span>Bài viết của tài khoản Premium được ưu tiên hiển thị ở vị trí đầu danh sách hoặc trong khu vực nổi bật.</span>
+            </li>
+            <li class="flex items-center benefit-item">
+                <i data-feather="check-circle" class="text-green-500 mr-3"></i>
+                <span>Cung cấp dịch vụ đẩy bài lên đầu trang hoặc xuất hiện trong banner quảng cáo.</span>
+            </li>
+            <li class="flex items-center benefit-item">
+                <i data-feather="check-circle" class="text-green-500 mr-3"></i>
+                <span>Bài viết của tài khoản Premium sẽ được ưu tiên hiển thị khi người dùng tìm kiếm hoặc lọc bài viết.</span>
+            </li>
+            <li class="flex items-center benefit-item">
+                <i data-feather="check-circle" class="text-green-500 mr-3"></i>
+                <span>Tài khoản Premium được phép đăng nhiều bài viết hơn so với tài khoản thường.</span>
+            </li>
+        </ul>
+
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Chọn gói đăng ký</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8" id="plan-options">
+            <div class="plan-card border rounded-lg p-4 text-center hover:shadow-lg transition duration-300 cursor-pointer" data-plan="monthly" data-price="290.000" data-period="thanh toán mỗi tháng">
+                <h4 class="text-lg font-semibold mb-2">Gói tháng</h4>
+                <p class="text-3xl font-bold text-blue-600">290.000</p>
+                <p class="text-sm text-gray-600">mỗi tháng</p>
+            </div>
+            <div class="plan-card border rounded-lg p-4 text-center hover:shadow-lg transition duration-300 cursor-pointer" data-plan="yearly" data-price="2.070.000" data-period="thanh toán mỗi năm">
+                <h4 class="text-lg font-semibold mb-2">Gói năm</h4>
+                <p class="text-3xl font-bold text-blue-600">2.070.000</p>
+                <p class="text-sm text-gray-600">mỗi năm</p>
+                <p class="text-sm text-green-600 font-semibold mt-2">Save 17%</p>
+            </div>
+            <div class="plan-card border rounded-lg p-4 text-center hover:shadow-lg transition duration-300 cursor-pointer" data-plan="quarterly" data-price="10.000.000" data-period="dùng trọn đời">
+                <h4 class="text-lg font-semibold mb-2">Gói vĩnh viễn</h4>
+                <p class="text-3xl font-bold text-blue-600">10.000.000</p>
+                <p class="text-sm text-gray-600">ưu đãi trọn đời</p>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label for="payment-method" class="block text-sm font-medium text-gray-700 mb-2">
+                Payment Method
+            </label>
+            <select id="payment-method" class="w-full">
+                <option value="credit-card">Credit Card</option>
+                <option value="paypal">PayPal</option>
+                <option value="bank-transfer">Bank Transfer</option>
+            </select>
+        </div>
+
+        <div class="mb-6 p-4 bg-gray-100 rounded-lg">
+            <h4 class="text-lg font-semibold mb-2">Gói ưu đãi đã chọn:</h4>
+            <p class="text-2xl font-bold text-blue-600"><span id="selected-price"></span> VND</p>
+            <p class="text-sm text-gray-600"><span id="selected-period"></span></p>
+        </div>
+
+        <div class="mb-6">
+            <label class="flex items-center">
+                <input type="checkbox" id="terms-checkbox" class="form-checkbox h-5 w-5 text-blue-600" required>
+                <span class="ml-2 text-sm text-gray-700">
+                        Tôi đồng ý với <a href="#" class="text-blue-600 hover:underline">các điều khoản đăng ký</a>
+                    </span>
+            </label>
+        </div>
+
+        <button id="register-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600  to-indigo-600 text-white py-4 rounded-lg font-bold text-lg hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-lg flex items-center justify-center">
+            <i data-feather="check-circle" class="mr-2"></i>
+            Đăng ký ngay
+        </button>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Initialize Feather Icons
+        feather.replace();
+
+        // Initialize Select2 for the payment method dropdown
+        $('#payment-method').select2({
+            minimumResultsForSearch: Infinity, // Disable search
+            templateResult: formatPaymentOption,
+            templateSelection: formatPaymentOption
+        });
+
+        function formatPaymentOption(option) {
+            if (!option.id) {
+                return option.text;
+            }
+            var $option = $(
+                '<span class="flex items-center"><i data-feather="' + getPaymentIcon(option.id) + '" class="mr-2"></i> ' + option.text + '</span>'
+            );
+            feather.replace($option[0]);
+            return $option;
+        }
+
+        function getPaymentIcon(paymentMethod) {
+            switch (paymentMethod) {
+                case 'credit-card':
+                    return 'credit-card';
+                case 'paypal':
+                    return 'dollar-sign';
+                case 'bank-transfer':
+                    return 'briefcase';
+                default:
+                    return 'credit-card';
+            }
+        }
+
+        // Add hover effect to benefit items
+        $('.benefit-item').hover(
+            function() {
+                $(this).find('[data-feather="check-circle"]').addClass('text-blue-500');
+                feather.replace();
+            },
+            function() {
+                $(this).find('[data-feather="check-circle"]').removeClass('text-blue-500');
+                feather.replace();
+            }
+        );
+
+        // Handle plan selection
+        $('.plan-card').on('click', function() {
+            $('.plan-card').removeClass('ring-2 ring-blue-500');
+            $(this).addClass('ring-2 ring-blue-500');
+
+            const price = $(this).data('price');
+            const period = $(this).data('period');
+
+            $('#selected-price').text(price);
+            $('#selected-period').text(period);
+        });
+
+        // Handle registration
+        $('#register-btn').on('click', function(e) {
+            e.preventDefault();
+            if (!$('#terms-checkbox').is(':checked')) {
+                alert('Please agree to the Terms and Conditions');
+                return;
+            }
+            $(this).addClass('animate-pulse scale-105');
+            setTimeout(() => {
+                $(this).removeClass('animate-pulse scale-105');
+                alert('Thank you for subscribing! We will process your premium account shortly.');
+            }, 1000);
+        });
+    });
+</script>
+</body>
+</html>
+
