@@ -4,6 +4,7 @@ import khuong.com.lasttermjava.dto.ProfileDTO;
 import khuong.com.lasttermjava.dto.ResponseDTO;
 import khuong.com.lasttermjava.entity.Profile;
 import khuong.com.lasttermjava.repository.ProfileRepository;
+import khuong.com.lasttermjava.repository.UserRepository;
 import khuong.com.lasttermjava.service.ImageUploadService;
 import khuong.com.lasttermjava.service.ProfileService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/profiles")
@@ -24,6 +26,8 @@ public class ProfileController {
     private final ProfileService profileService;
     @Autowired
     private ProfileRepository profileRepository;
+    @Autowired
+    private UserRepository userRepository;
 
 
     @GetMapping
@@ -99,16 +103,28 @@ public class ProfileController {
             @RequestParam("bio") String bio,
             @RequestParam("address") String address,
             @RequestParam(value = "avtPhoto", required = false) MultipartFile avtPhoto,
-            @RequestParam("user_id") Long userId) throws IOException {
+            @RequestParam("user_id") Long userId,
+            @RequestParam("phoneNumber") String phoneNumber ) throws IOException {
 
         String avtPhotoUrl = null;
 
         if (avtPhoto != null && !avtPhoto.isEmpty()) {
             avtPhotoUrl = imageUploadService.uploadImage(avtPhoto);
         }
+        // Tìm profile theo userId
+        Optional<Profile> profileOptional = profileRepository.findByUserId(userId);
+        Profile profile;
+
+        if (profileOptional.isEmpty()) {
+            // Nếu không tìm thấy profile, tạo mới
+            profile = new Profile();
+            profile.setUser(userRepository.findById(userId).get()); // Gán userId cho profile mới
+        } else {
+            // Nếu tìm thấy profile, sử dụng profile cũ
+            profile = profileOptional.get();
+        }
 
 
-        Profile profile = profileRepository.findByUserId(userId).get();
         System.out.println("Before P: " + profile.getAvtPhoto());
 
         String afterP = profile.getAvtPhoto();
@@ -120,6 +136,7 @@ public class ProfileController {
         profile.setGender(gender);
         profile.setBio(bio);
         profile.setAddress(address);
+        profile.setPhoneNumber(phoneNumber);
 
         if(avtPhotoUrl != null) {
             profile.setAvtPhoto(avtPhotoUrl);

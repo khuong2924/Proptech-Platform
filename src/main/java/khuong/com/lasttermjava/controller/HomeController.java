@@ -4,27 +4,22 @@ import jakarta.jws.WebParam;
 import khuong.com.lasttermjava.dto.JobPostDTO;
 import khuong.com.lasttermjava.dto.ProfileDTO;
 import khuong.com.lasttermjava.dto.ResponseDTO;
-import khuong.com.lasttermjava.entity.Profile;
-import khuong.com.lasttermjava.entity.Transaction;
-import khuong.com.lasttermjava.entity.User;
+import khuong.com.lasttermjava.entity.*;
 import khuong.com.lasttermjava.repository.*;
 import khuong.com.lasttermjava.service.ImageUploadService;
 import khuong.com.lasttermjava.service.JobPostService;
 import khuong.com.lasttermjava.service.ProfileService;
-import khuong.com.lasttermjava.entity.JobPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import khuong.com.lasttermjava.utils.SessionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -85,15 +80,21 @@ public class HomeController {
     public String home(Model model) {
         List<JobPost> jobPosts = jobPostRepository.findAll();
         Long userId = SessionUtils.getCurrentUserId();
+        boolean checkUser = userId != null;
 
-//        List<ApplyInfo> infos = applyInfoRepository.findAllByJobPostUserId(userId);
+        //        List<ApplyInfo> infos = applyInfoRepository.findAllByJobPostUserId(userId);
 //        model.addAttribute("infos", infos);
 
         // Sort the list based on the createdAt field
 //        jobPosts.sort((jobPost1, jobPost2) -> jobPost2.getCreatedAt().compareTo(jobPost1.getCreatedAt()));
+        List<Notification> listNotis = notificationRepository.findAll();
+        model.addAttribute("listNotis", listNotis);
 
-        // Add the sorted list to the model
         model.addAttribute("jobPosts", jobPosts);
+        model.addAttribute("checkUser", checkUser);
+
+
+
         return "homePage";
     }
 
@@ -302,8 +303,42 @@ public class HomeController {
         transaction.setNgayTraDinhKy(ngayTraDinhKy);
 
         transactionRepository.save(transaction);
+        //
+        //
+
+       Notification noti = new Notification();
+       noti.setJobPost(jobPost);
+       Profile profile = profileRepository.findByPhoneNumber(sdtKhachHang).get();
+       noti.setUser(profile.getUser());
+       noti.setFlagged(false);
+       noti.setContent(noiDung);
+       noti.setTransaction(transaction);
+       notificationRepository.save(noti);
 
         return "redirect:/home";
     }
+
+    @PostMapping("updateTrans/{id}")
+    public String updateTrans(@PathVariable Long id, Model model) {
+        Transaction transaction = transactionRepository.findById(id).get();
+        transaction.setTrangThaiGiaoDich(true);
+
+        Notification noti = notificationRepository.findByTransaction(transaction).get();
+        notificationRepository.delete(noti);
+        return "redirect:/home";
+
+    }
+
+    @PostMapping("refuseTrans/{id}")
+    public String refuseTrans(@PathVariable Long id, Model model) {
+        Transaction transaction = transactionRepository.findById(id).get();
+
+        Notification noti = notificationRepository.findByTransaction(transaction).get();
+        notificationRepository.delete(noti);
+        return "redirect:/home";
+
+    }
+
+
 }
 

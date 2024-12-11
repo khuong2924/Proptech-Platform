@@ -8,5 +8,6 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
     List<Transaction> findAllByOrderByIdDesc();
     List<Transaction> findByLoaiHoSo(String loaiHoSo);
+    List<Transaction> findBySdtKhachHang(String sdtKhachHang);
 
 }

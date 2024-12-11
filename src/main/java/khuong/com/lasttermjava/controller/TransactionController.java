@@ -3,6 +3,7 @@ package khuong.com.lasttermjava.controller;
 import khuong.com.lasttermjava.dto.ResponseDTO;
 import khuong.com.lasttermjava.entity.JobPost;
 import khuong.com.lasttermjava.entity.Transaction;
+import khuong.com.lasttermjava.repository.NotificationRepository;
 import khuong.com.lasttermjava.repository.TransactionRepository;
 import khuong.com.lasttermjava.repository.JobPostRepository;
 import khuong.com.lasttermjava.service.ImageUploadService;
@@ -29,6 +30,8 @@ public class TransactionController {
     private final JobPostRepository jobPostRepository;
     @Autowired
     private final ImageUploadService imageUploadService;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
 
     @GetMapping
@@ -73,6 +76,7 @@ public class TransactionController {
                 .message("Transaction deleted successfully")
                 .build();
     }
+
 
     @PostMapping("/upload")
     public ResponseDTO<Void> createOrUpdateTransaction(
@@ -136,44 +140,14 @@ public class TransactionController {
                 .message("Transaction created or updated successfully")
                 .build();
     }
-//    @GetMapping("/rent")
-//    public List<Map<String, Object>> getRentProfiles() {
-//        List<Transaction> rentTransactions = transactionRepository.findAll()
-//                .stream()
-//                .filter(transaction -> "rent".equalsIgnoreCase(transaction.getLoaiHoSo()))
-//                .collect(Collectors.toList());
-//
-//        return rentTransactions.stream()
-//                .map(transaction -> Map.of(
-//                        "content", transaction.getNoiDung(),
-//                        "phoneNumber", transaction.getSdtKhachHang(),
-//                        "leaseAgreement", transaction.getHopDongThue(),
-//                        "depositAmount", transaction.getTienThue(),
-//                        "timePay", transaction.getNgayTraDinhKy(),
-//                        "status", transaction.getTrangThaiGiaoDich() ? "done" : "unpaid"
-//                ))
-//                .collect(Collectors.toList());
-//    }
-//
-//
-//    @GetMapping("/sale")
-//    public List<Map<String, Object>> getSaleProfiles() {
-//        List<Transaction> saleTransactions = transactionRepository.findAll()
-//                .stream()
-//                .filter(transaction -> "sale".equalsIgnoreCase(transaction.getLoaiHoSo()))
-//                .collect(Collectors.toList());
-//
-//        return saleTransactions.stream()
-//                .map(transaction -> Map.of(
-//                        "content", transaction.getNoiDung(),
-//                        "phoneNumber", transaction.getSdtKhachHang(),
-//                        "legalPapers", transaction.getGiayToPhapLy(),
-//                        "salesContract", transaction.getHopDongMuaBan(),
-//                        "paymentStatus", transaction.getTrangThaiThanhToan() ? "Paid" : "Unpaid",
-//                        "status", transaction.getTrangThaiGiaoDich() ? "done" : "unpaid"
-//                ))
-//                .collect(Collectors.toList());
-//    }
 
+    @DeleteMapping("/noti/{id}")
+    public ResponseDTO<Void> deleteNoti(@PathVariable("id") Long id) {
+        notificationRepository.deleteById(id);
+        return ResponseDTO.<Void>builder()
+                .status(200)
+                .message("Transaction deleted successfully")
+                .build();
+    }
 
 }

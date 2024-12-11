@@ -28,5 +28,11 @@ public class Notification {
     private User user;
 
     private boolean isFlagged;
+
+    private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "transaction_id", nullable = false)
+    private Transaction transaction;
 }
 

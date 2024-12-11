@@ -8,6 +8,7 @@ import java.util.Optional;
 
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
     Optional<Profile> findByUserId(Long userId);
+    Optional<Profile> findByPhoneNumber(String phoneNumber);
 
     @Override
     List<Profile> findAll();
