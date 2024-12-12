@@ -74,8 +74,8 @@
                                 <!-- Lặp qua danh sách notifications -->
                                 <li th:each="noti : ${listNotis}" class="bg-white p-4 rounded shadow">
                                     <!-- Tạo liên kết tới postDetail với jobPost.id -->
-                                    <a th:href="@{/transaction/{id}(id=${noti.jobPost.id})}" class="block">
-                                        <p class="font-semibold" th:text="${noti.user.profile.fullName}">John Doe</p>
+                                    <a th:href="@{/transaction/{id}(id=${noti.transaction.id})}" class="block">
+                                        <p class="font-semibold" th:text="${noti.jobPost.user.profile.fullName}">John Doe</p>
                                         <p class="text-sm text-gray-600 mb-2" th:text="${noti.content}">Requested a property viewing for Spacious apartment in downtown.</p>
                                     </a>
                                     <div class="flex space-x-2">
@@ -272,7 +272,6 @@
                                 <div class="flex justify-between items-start">
                                     <div>
                                         <h3 th:text="${jobPost.tieuDe}" class="text-2xl text-gray-800 font-semibold"></h3>
-                                        <p th:text="${jobPost.diaChi}" class="text-gray-600 mt-1 font-semibold"></p>
                                     </div>
                                     <button onclick="toggleBookmark(this)" class="text-gray-400 hover:text-gray-500">
                                         <svg class="bookmark-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -282,10 +281,17 @@
                                 </div>
                                 <div class="mt-4">
                                     <span th:text="${jobPost.mucGia} + ' VND'" class="text-2xl text-blue-600 font-semibold"></span>
+                                </div>
+
+                                <!-- Thêm thông tin diện tích và địa chỉ -->
+                                <div class="mt-4">
+                                    <span th:text="'Diện tích: ' + ${jobPost.dienTich} + ' m²'" class="text-sm text-gray-600"></span>
 
                                 </div>
-<!--                                <div class="mt-4 flex items-center space-x-4 text-sm">-->
-<!--                                </div>-->
+                                <div class="">
+                                    <span th:text="'Địa chỉ: ' + ${jobPost.diaChi}" class="text-sm text-gray-600"></span>
+                                </div>
+
                                 <div class="mt-6 flex items-center">
                                     <img th:src="@{${jobPost.user.profile.avtPhoto}}" alt="Agent" class="w-10 h-10 rounded-full object-cover">
                                     <div class="ml-4">
@@ -294,6 +300,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </a>
                 </div>
@@ -335,7 +342,7 @@
                         </div>
                     </div>
                     <a href="/payment-detail" class="mt-6 w-full">
-                        <button type="button" class="w-full bg-white text-blue-600 py-2 rounded-lg font-semibold hover:bg-blue-50 transition duration-300">
+                        <button type="button" class="w-full bg-white text-blue-600 py-2 rounded-lg font-semibold hover:bg-blue-50 transition duration-300 mt-8">
                             Liên hệ với chúng tôi
                         </button>
                     </a>

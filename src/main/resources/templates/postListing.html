@@ -159,7 +159,7 @@
                                 <label class="block text-sm font-medium text-gray-700 flex items-center gap-1">
                                     Tỉnh/Thành phố
                                 </label>
-                                <select id="province" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 hover:border-blue-400" required>
+                                <select id="province" name="province" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 hover:border-blue-400" required>
                                     <option value="">Chọn Tỉnh/Thành phố</option>
                                 </select>
                             </div>
@@ -167,16 +167,16 @@
                                 <label class="block text-sm font-medium text-gray-700 flex items-center gap-1">
                                     Quận
                                 </label>
-                                <select id="district" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 hover:border-blue-400" required>
+                                <select id="district" name="district" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 hover:border-blue-400" required>
                                     <option value="">Chọn quận</option>
                                 </select>
                             </div>
                         </div>
                         <div class="transform transition-all duration-200 hover:scale-102">
-                            <label  class="block text-sm font-medium text-gray-700 flex items-center gap-1">
+                            <label class="block text-sm font-medium text-gray-700 flex items-center gap-1">
                                 Địa chỉ cụ thể
                             </label>
-                            <input id="detailAddress" type="text" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 hover:border-blue-400" required>
+                            <input id="detailAddress" name="detailAddress" type="text" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 hover:border-blue-400" required>
                         </div>
                         <!-- Hidden input -->
                         <input type="hidden" id="diaChi" name="diaChi">
@@ -190,10 +190,10 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Loại Bất động sản</label>
                             <select id="loaiBatDongSan" name="loaiBatDongSan" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
-                                <option value="Nhà đất">Nhà đất</option>
                                 <option value="Chung cư">Chung cư</option>
-                                <option value="Căn hộ dịch vụ">Căn hộ dịch vụ</option>
-                                <option value="Đất">Đất</option>
+                                <option value="Nhà riêng">Nhà riêng</option>
+                                <option value="Đất nền">Đất nền</option>
+                                <option value="Bất động sản khác">Bất động sản khác</option>
                             </select>
                         </div>
                         <div>
@@ -205,7 +205,7 @@
                             <input id="soPhongTamVeSinh" name="soPhongTamVeSinh" type="number" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Diện tích (ha)</label>
+                            <label class="block text-sm font-medium text-gray-700">Diện tích  (m²)</label>
                             <input id="dienTich" name="dienTich" type="number" step="0.01" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         </div>
 
@@ -216,9 +216,9 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Đơn vị</label>
                             <select id="donVi" name="donVi" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option>VND</option>
-                                <option>USD</option>
-                                <option>Euro</option>
+                                <option value="VND">VND</option>
+                                <option value="VND/m²">VND/m²</option>
+                                <option value="Thỏa Thuận">Thỏa thuận</option>
                             </select>
                         </div>
                     </div>
@@ -230,19 +230,31 @@
                     <h2 class="text-xl font-semibold mb-4 text-gray-700">Thông tin chi tiết</h2>
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Hướng nhà</label>
-                            <input id="huongNha" name="huongNha" type="text" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <label for="huongNha" class="block text-sm font-medium text-gray-700">Hướng nhà</label>
+                            <select id="huongNha" name="huongNha" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="hướng Đông">Đông</option>
+                                <option value="hướng Tây">Tây</option>
+                                <option value="hướng Nam">Nam</option>
+                                <option value="hướng Bắc">Bắc</option>
+                            </select>
                         </div>
+
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Hướng ban công</label>
-                            <input id="huongBanCong" name="huongBanCong" type="text" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <label for="huongBanCong" class="block text-sm font-medium text-gray-700">Hướng ban công</label>
+                            <select id="huongBanCong" name="huongBanCong" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                <option value="hướng Đông">Đông</option>
+                                <option value="hướng Tây">Tây</option>
+                                <option value="hướng Nam">Nam</option>
+                                <option value="hướng Bắc">Bắc</option>
+                            </select>
                         </div>
+
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Đường vào</label>
+                            <label class="block text-sm font-medium text-gray-700">Đường vào (m²)</label>
                             <input id="duongVao" name="duongVao" type="number" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Mặt tiền</label>
+                            <label class="block text-sm font-medium text-gray-700">Mặt tiền (m²)</label>
                             <input id="matTien" name="matTien" type="number" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         </div>
                     </div>
@@ -255,7 +267,7 @@
                                     class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 <option value="Đầy đủ nội thất">Đầy đủ nội thất</option>
                                 <option value="Nội thất cơ bản">Nội thất cơ bản</option>
-                                <option value="Không nôội thất">Không nội thất</option>
+                                <option value="Không nội thất">Không nội thất</option>
                             </select>
                         </div>
                         <div class="w-1/2">
@@ -266,17 +278,11 @@
                                     class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 <option value="Sổ đỏ">Sổ đỏ</option>
                                 <option value="Sổ hồng">Sổ hồng</option>
+                                <option value="Liên hệ">Liên hệ</option>
                             </select>
                         </div>
                     </div>
                 </div>
-
-
-
-
-
-
-
                 <!-- Description Section -->
                 <div class="p-6 rounded-lg border border-gray-200 bg-gradient-to-br from-blue-50 to-white hover:shadow-lg transition-all duration-300">
                     <div>
@@ -306,10 +312,6 @@
                             <label class="block text-sm font-medium text-gray-700">Số điện thoại liên hệ</label>
                             <input id="soDienThoaiChu" name="soDienThoaiChu" type="tel" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 hover:border-blue-400" required>
                         </div>
-<!--                        <div class="md:col-span-2 transform transition-all duration-200 hover:scale-102">-->
-<!--                            <label class="block text-sm font-medium text-gray-700">Email</label>-->
-<!--                            <input type="email" class="mt-1 block w-full h-12 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-all duration-200 hover:border-blue-400" required>-->
-<!--                        </div>-->
                     </div>
                 </div>
 
@@ -368,143 +370,17 @@
 </body>
 
 <script>
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     const form = document.querySelector('form');
-    //
-    //     form.addEventListener('submit', function(event) {
-    //         event.preventDefault(); // Ngừng hành động mặc định của form
-    //     });
-    // });
-    //
-    // function submitForm(event) {
-    //     // Lấy userId từ trường ẩn trong form
-    //     const userId = BigInt(document.getElementById('userId').value);
-    //
-    //     // Kiểm tra nếu userId là null hoặc rỗng
-    //     if (!userId) {
-    //         alert('Error: User is not logged in or user ID is missing.');
-    //         return; // Dừng lại nếu không có userId
-    //     }
-    //
-    //     // Lấy giá trị từ các trường form
-    //     const province = document.getElementById("province").value;
-    //     const district = document.getElementById("district").value;
-    //     const detailAddress = document.getElementById("detailAddress").value;
-    //     const fullAddress = `${detailAddress}, ${district}, ${province}`;
-    //
-    //     // Lắng nghe sự kiện thay đổi trên các radio buttons
-    //     const radioButtons = document.querySelectorAll('input[name="listingType"]');
-    //     let loaiBaiDang = '';
-    //
-    //     radioButtons.forEach(radio => {
-    //         radio.addEventListener('change', function() {
-    //
-    //
-    //             // Kiểm tra xem radio button nào được chọn
-    //             if (document.getElementById('loaiBaiDang1').checked) {
-    //                 loaiBaiDang = document.querySelector('label[for="loaiBaiDang1"] span').textContent;
-    //             } else if (document.getElementById('loaiBaiDang2').checked) {
-    //                 loaiBaiDang = document.querySelector('label[for="loaiBaiDang2"] span').textContent;
-    //             }
-    //
-    //             // console.log(loaiBaiDang); // In ra loại bài đăng đã chọn
-    //         });
-    //     });
-    //
-    //     // Chế độ hiển thị
-    //     let congKhai = document.getElementById('congKhai').value === 'Công khai';
-    //
-    //     // Các trường thông tin bất động sản
-    //     let loaiBatDongSan = document.getElementById('loaiBatDongSan').value;
-    //     let soPhongNgu = document.getElementById('soPhongNgu').value;
-    //     let soPhongTamVeSinh = document.getElementById('soPhongTamVeSinh').value;
-    //     let dienTich = document.getElementById('dienTich').value;
-    //     let muaGia = document.getElementById('muaGia').value;
-    //     let donVi = document.getElementById('donVi').value;
-    //
-    //     // Các thông tin chi tiết khác
-    //     let huongNha = document.getElementById('huongNha').value;
-    //     let huongBanCong = document.getElementById('huongBanCong').value;
-    //     let duongVao = document.getElementById('duongVao').value;
-    //     let matTien = document.getElementById('matTien').value;
-    //     let noiThat = document.getElementById('noiThat').value;
-    //     let giayToPhapLy = document.getElementById('giayToPhapLy').value;
-    //     let tenChuBaiDang = document.getElementById('tenChuBaiDang').value;
-    //     let soDienThoaiChu = document.getElementById('soDienThoaiChu').value;
-    //     let tieuDe = document.getElementById('tieuDe').value;
-    //     let moTa = document.getElementById('moTa').value;
-    //
-    //     // Lấy các file hình ảnh
-    //     const imageInput = document.getElementById('images'); // input[type="file"] với id="images"
-    //     const files = imageInput.files;
-    //
-    //     const formData = new FormData();
-    //
-    //     // Thêm tất cả các trường dữ liệu vào formData
-    //     formData.append('userId', userId);
-    //     formData.append('loaiBaiDang', loaiBaiDang);
-    //     formData.append('diaChi', fullAddress);
-    //     formData.append('loaiBatDongSan', loaiBatDongSan);
-    //     formData.append('dienTich', dienTich);
-    //     formData.append('muaGia', muaGia);
-    //     formData.append('donVi', donVi);
-    //     formData.append('giayToPhapLy', giayToPhapLy);
-    //     formData.append('noiThat', noiThat);
-    //     formData.append('soPhongNgu', soPhongNgu);
-    //     formData.append('soPhongTamVeSinh', soPhongTamVeSinh);
-    //     formData.append('huongNha', huongNha);
-    //     formData.append('huongBanCong', huongBanCong);
-    //     formData.append('duongVao', duongVao);
-    //     formData.append('matTien', matTien);
-    //     formData.append('tenChuBaiDang', tenChuBaiDang);
-    //     formData.append('soDienThoaiChu', soDienThoaiChu);
-    //     formData.append('tieuDe', tieuDe);
-    //     formData.append('moTa', moTa);
-    //     formData.append('congKhai', congKhai);
-    //
-    //     // Thêm tất cả các hình ảnh vào formData
-    //     if (files.length > 0) {
-    //         for (let i = 0; i < files.length; i++) {
-    //             formData.append('images', files[i]); // 'images' là tên trường mà backend yêu cầu
-    //         }
-    //     }
-    //
-    //     // Gửi formData lên server qua API
-    //     fetch('/create', {
-    //         method: 'POST',
-    //         body: formData, // Đảm bảo gửi FormData thay vì JSON
-    //     })
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             alert('Job post created successfully!');
-    //             console.log(data);
-    //         })
-    //         .catch(error => {
-    //             alert('Error creating job post!');
-    //             console.error('Error:', error);
-    //         });
-    // }
 
+    document.querySelector('form').addEventListener('submit', function(event) {
+        const province = document.getElementById('province') ? document.getElementById('province').value : '';
+        const district = document.getElementById('district').value;
+        const detailAddress = document.getElementById('detailAddress').value;
 
+        // Tạo giá trị cho diaChi
+        const diaChi = `${province}, ${district}, ${detailAddress}`;
 
-    document.querySelector("form").addEventListener("submit", function (event) {
-        // Lấy giá trị từ các trường
-        const province = document.getElementById("province").value;
-        const district = document.getElementById("district").value;
-        const detailAddress = document.getElementById("detailAddress").value;
-
-        // Kiểm tra nếu có trường nào chưa nhập
-        if (!province || !district || !detailAddress) {
-            event.preventDefault();
-            alert("Vui lòng nhập đầy đủ thông tin địa chỉ!");
-            return;
-        }
-
-        // Kết hợp các giá trị thành một chuỗi
-        const fullAddress = `${province}, ${district}, ${detailAddress}`;
-
-        // Gán chuỗi vào hidden input
-        document.getElementById("diaChi").value = fullAddress;
+        // Gán giá trị cho trường ẩn diaChi
+        document.getElementById('diaChi').value = diaChi;
     });
 
 

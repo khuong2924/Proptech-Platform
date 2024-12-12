@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:x-transition="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Confirmation - Luxury Real Estate Posting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-600 white-500 to-white-500 min-h-screen items-center justify-center font-['Poppins']">
+<header class="bg-gradient-to-r from-blue-600 to-purple-600 shadow-xl transition-all duration-500 hover:from-blue-700 hover:to-purple-700">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex items-center space-x-8">
+                <div class="flex items-center">
+                    <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994" alt="Logo" class="h-8 w-auto transition transform hover:scale-105">
+                    <span class="ml-2 text-2xl font-bold text-white">DreamHome</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="/home" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Trang chủ</a>
+                    <a href="#footer" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 hover:scale-105">Liên hệ</a>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <!--                    <form th:if="${!checkUser}" action="/login" method="get">-->
+                <!--                        <button type="submit" class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all after:duration-300">-->
+                <!--                            Đăng nhập-->
+                <!--                        </button>-->
+                <!--                    </form>-->
+
+                <a th:if="${!(checkUser ?: false)}" href="/login">
+                    <button class="text-white hover:text-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-white hover:after:w-full after:transition-all after:duration-300">
+                        Đăng nhập
+                    </button>
+                </a>
+                <a>
+                    <button id="notificationBtn"  class="w-10 h-10 rounded-full bg-white p-1 hover:shadow-lg transform hover:-translate-y-1 transition duration-300 hover:scale-105 flex items-center justify-center group">
+                        <i class="fas fa-bell text-blue-600 group-hover:text-purple-600 text-lg"></i>
+                    </button>
+                </a>
+
+                <div id="notificationContent" class="hidden">
+                    <div class="p-4 max-w-sm">
+                        <h3 class="text-lg font-semibold mb-4">Thông báo</h3>
+                        <ul class="space-y-4">
+                            <!-- Lặp qua danh sách notifications -->
+                            <li th:each="noti : ${listNotis}" class="bg-white p-4 rounded shadow">
+                                <!-- Tạo liên kết tới postDetail với jobPost.id -->
+                                <a th:href="@{/postDetail/{id}(id=${noti.jobPost.id})}" class="block">
+                                    <p class="font-semibold" th:text="${noti.user.username}">John Doe</p>
+                                    <p class="text-sm text-gray-600 mb-2" th:text="${noti.content}">Requested a property viewing for Spacious apartment in downtown.</p>
+                                </a>
+                                <div class="flex space-x-2">
+
+                                    <form th:action="@{/refuseTrans/{id}(id=${noti.transaction.id})}" method="POST">
+                                        <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600">
+                                            Từ chối
+                                        </button>
+                                    </form>
+
+                                    <form th:action="@{/updateTrans/{id}(id=${noti.transaction.id})}" method="POST">
+                                        <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded text-sm hover:bg-green-600">
+                                            Xác nhận
+                                        </button>
+                                    </form>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+
+                <div class="relative">
+                    <button onclick="toggleDropdown()" class="w-10 h-10 rounded-full bg-white p-1 hover:shadow-lg transform hover:-translate-y-1 transition duration-300 hover:scale-105 flex items-center justify-center group">
+                        <svg class="w-6 h-6 text-blue-600 group-hover:text-purple-600 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </button>
+                    <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-50 transform transition-all duration-300 ease-in-out">
+                        <a href="/personal-page" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Trang cá nhân</a>
+                        <a href="/transaction-page" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Quản lý hồ sơ</a>
+
+                        <a href="/account" class="block px-4 py-2 text-gray-800 hover:bg-blue-50 hover:text-blue-600 transition duration-200">Chỉnh sửa thông tin</a>
+                        <div class="border-t border-gray-100 my-1"></div>
+                        <a href="#" class="block px-4 py-2 text-red-600 hover:bg-red-50 transition duration-200">Đăng xuất</a>
+                    </div>
+                </div>
+                <form action="/upload-post" method="get">
+                    <button type="submit" class="bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white px-6 py-2 rounded-full font-semibold shadow-lg transform hover:-translate-y-1 transition duration-300 hover:scale-105 flex items-center space-x-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        <span>Đăng bài</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="flex items-center justify-center min-h-screen">
+<div class="bg-blue-500 backdrop-blur-lg rounded-3xl shadow-2xl p-8 max-w-md w-full" x-data="{ step: 1 }" x-init="() => {
+        gsap.from($el, {opacity: 0, y: 50, duration: 1, ease: 'power3.out'});
+        gsap.to('.bg-gradient', {backgroundPosition: '200% center', duration: 15, ease: 'none', repeat: -1});
+    }">
+
+    <h3 class="text-4xl font-bold text-center mb-6 text-white">Thanh toán phí đăng bài</h3>
+
+    <div x-show="step === 1" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100">
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-2 text-white"></h2>
+            <p class="text-gray-100">Tài khoản của bạn chưa phải là tài khoản premium, hãy đăng ký premium để có thể đăng bài miễn phí vào lần sau. </p>
+        </div>
+        <div class="bg-white bg-opacity-30 rounded-2xl p-6 mb-6 transform hover:scale-105 transition-transform duration-300 animate-float">
+            <p class="font-bold text-3xl text-white mb-2">10.000 VND</p>
+            <p class="text-sm text-gray-200">Hãy đăng ký premium vào lần sau để:</p>
+            <ul class="mt-4 space-y-2">
+                <li class="flex items-center text-white animate-fadeIn" style="animation-delay: 0.2s;">
+                    <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Nhận được các ưu đãi tốt hơn
+                </li>
+                <li class="flex items-center text-white animate-fadeIn" style="animation-delay: 0.4s;">
+                    <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Sử dụng được các tính năng vip
+                </li>
+                <li class="flex items-center text-white animate-fadeIn" style="animation-delay: 0.6s;">
+                    <svg class="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Miễn phí đăng bài
+                </li>
+            </ul>
+        </div>
+            <button @click="step = 2; runButtonAnimation();" class="w-full bg-gradient-to-r from-yellow-400 to-yellow-600 text-white rounded-full py-4 font-bold text-lg hover:from-yellow-500 hover:to-yellow-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50 shadow-lg animate-pulse">
+                Xác nhận thanh toán
+            </button>
+
+
+    </div>
+
+    <div x-show="step === 2" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform scale-90" x-transition:enter-end="opacity-100 transform scale-100" x-cloak>
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold mb-2 text-white">Secure Payment</h2>
+            <p class="text-gray-200">Enter your payment details below.</p>
+        </div>
+        <div  class="space-y-4">
+            <div class="relative animate-slideInFromLeft" style="animation-delay: 0.2s;">
+                <input type="text" id="card-number" placeholder="Card Number" class="w-full px-5 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 bg-white bg-opacity-20 text-white placeholder-gray-300" required>
+                <svg class="w-6 h-6 text-gray-300 absolute right-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+            </div>
+            <div class="flex space-x-4">
+                <div class="flex-1 relative animate-slideInFromLeft" style="animation-delay: 0.4s;">
+                    <input type="text" id="expiry-date" placeholder="MM/YY" class="w-full px-5 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 bg-white bg-opacity-20 text-white placeholder-gray-300" required>
+                    <svg class="w-6 h-6 text-gray-300 absolute right-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div class="flex-1 relative animate-slideInFromLeft" style="animation-delay: 0.6s;">
+                    <input type="text" id="cvv" placeholder="CVV" class="w-full px-5 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-yellow-400 bg-white bg-opacity-20 text-white placeholder-gray-300" required>
+                    <svg class="w-6 h-6 text-gray-300 absolute right-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+            </div>
+            <form th:action="@{/payment/upload}" method="post">
+                <button type="submit" class="w-full bg-gradient-to-r from-green-400 to-green-600 text-white rounded-full py-4 font-bold text-lg hover:from-green-500 hover:to-green-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 shadow-lg animate-pulse">
+                    Confirm Secure Payment
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+</div>
+
+<style>
+    [x-cloak] { display: none !important; }
+    @keyframes shimmer {
+        0% { opacity: 0.5; }
+        50% { opacity: 1; }
+        100% { opacity: 0.5; }
+    }
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInFromLeft {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    .animate-shimmer { animation: shimmer 3s infinite; }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    .animate-fadeIn { animation: fadeIn 0.5s ease-out forwards; }
+    .animate-slideInFromLeft { animation: slideInFromLeft 0.5s ease-out forwards; }
+    .bg-gradient { background-size: 200% 200%; }
+</style>
+
+<script>
+    function runButtonAnimation() {
+        gsap.from('.animate-slideInFromLeft', {
+            x: -50,
+            opacity: 0,
+            stagger: 0.2,
+            duration: 0.8,
+            ease: 'power3.out'
+        });
+    }
+
+    function runConfirmAnimation() {
+        gsap.from('.animate-fadeIn', {
+            y: 20,
+            opacity: 0,
+            stagger: 0.2,
+            duration: 0.8,
+            ease: 'power3.out'
+        });
+    }
+</script>
+</body>
+</html>

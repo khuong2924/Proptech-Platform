@@ -62,4 +62,12 @@ public class Transaction {
     @Column(name = "ngayTraDinhKy", columnDefinition = "TEXT")
     private String ngayTraDinhKy;
 
+    @Column(name = "trangThaiDatCoc")
+    private Boolean trangThaiDatCoc;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+
 }

@@ -5,6 +5,7 @@ import khuong.com.lasttermjava.entity.JobPost;
 import khuong.com.lasttermjava.entity.Transaction;
 import khuong.com.lasttermjava.repository.JobPostRepository;
 import khuong.com.lasttermjava.repository.TransactionRepository;
+import khuong.com.lasttermjava.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,8 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
     @Autowired
     private JobPostRepository jobPostRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     // Mapping Transaction entities to DTOs
     private List<TransactionDTO> mapToDto(List<Transaction> transactions) {
@@ -35,7 +38,9 @@ public class TransactionService {
                     transaction.getTrangThaiThanhToan(),
                     transaction.getHopDongThue(),
                     transaction.getTienThue(),
-                    transaction.getNgayTraDinhKy()
+                    transaction.getNgayTraDinhKy(),
+                    transaction.getTrangThaiDatCoc(),
+                    transaction.getUser().getId()
             ));
         }
         return transactionDTOList;
@@ -61,6 +66,8 @@ public class TransactionService {
         transaction.setHopDongThue(transactionDTO.getHopDongThue());
         transaction.setTienThue(transactionDTO.getTienThue());
         transaction.setNgayTraDinhKy(transactionDTO.getNgayTraDinhKy());
+        transaction.setTrangThaiDatCoc(transactionDTO.getTrangThaiDatCoc());
+        transaction.setUser(userRepository.findById(transactionDTO.getUser_id()).get());
         transactionRepository.save(transaction);
     }
 
@@ -79,6 +86,8 @@ public class TransactionService {
         transaction.setHopDongThue(transactionDTO.getHopDongThue());
         transaction.setTienThue(transactionDTO.getTienThue());
         transaction.setNgayTraDinhKy(transactionDTO.getNgayTraDinhKy());
+        transaction.setTrangThaiDatCoc(transactionDTO.getTrangThaiDatCoc());
+        transaction.setUser(userRepository.findById(transactionDTO.getUser_id()).get());
         transactionRepository.save(transaction);
     }
 
@@ -98,7 +107,9 @@ public class TransactionService {
                 transaction.getTrangThaiThanhToan(),
                 transaction.getHopDongThue(),
                 transaction.getTienThue(),
-                transaction.getNgayTraDinhKy()
+                transaction.getNgayTraDinhKy(),
+                transaction.getTrangThaiDatCoc(),
+                transaction.getUser().getId()
         );
     }
 

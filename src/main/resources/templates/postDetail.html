@@ -143,15 +143,21 @@
 
 
                 <div class="p-6">
-                    <div class="flex justify-between items-start">
+                    <span class="inline-block px-3 py-1 text-sm font-medium text-white bg-blue-500 rounded-full" th:text="${jobPost.loaiBaiDang}">
+    Blue Tag
+  </span>
+                    <div class="flex justify-between items-start mt-8">
+
                         <div>
                             <h1 class="text-3xl font-bold text-gray-800" th:text="${jobPost.tieuDe}">Modern Family Home</h1>
-                            <p class="text-gray-600 mt-2" th:text="${jobPost.diaChi}">District 2, Ho Chi Minh City</p>
+
 
                         </div>
                         <span class="text-2xl font-bold text-blue-600" th:text="${jobPost.mucGia} + ' VND'">5.2 Billion VND</span>
 
                     </div>
+
+                    <p class="text-gray-600 mt-4" th:text="${jobPost.diaChi}">District 2, Ho Chi Minh City</p>
 
                     <div class="mt-6">
                         <h2 class="text-xl font-semibold text-gray-800">Nội dung bài đăng</h2>
@@ -162,6 +168,11 @@
 
                     <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div class="p-4 bg-gray-50 rounded-lg">
+                            <span class="block text-sm text-gray-600">Diện tích</span>
+                            <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.dienTich}">180 m²</span>
+                        </div>
+
+                        <div class="p-4 bg-gray-50 rounded-lg">
                             <span class="block text-sm text-gray-600">Số phòng ngủ</span>
                             <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.soPhongNgu}">4</span>
                         </div>
@@ -169,10 +180,7 @@
                             <span class="block text-sm text-gray-600">Số phòng tắm</span>
                             <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.soPhongTamVeSinh}">3</span>
                         </div>
-                        <div class="p-4 bg-gray-50 rounded-lg">
-                            <span class="block text-sm text-gray-600">Diện tích</span>
-                            <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.dienTich}">180 m²</span>
-                        </div>
+
 <!--                        <div class="p-4 bg-gray-50 rounded-lg">-->
 <!--                            <span class="block text-sm text-gray-600">Year Built</span>-->
 <!--                            <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.}">2022</span>-->
@@ -229,12 +237,12 @@
                 </div>
 
                 <div class="mt-6 space-y-4">
-                    <a th:href="@{https://zalo.me/{phoneNumber}(phoneNumber=${profile.phoneNumber})}" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 block text-center">
-                        Contact Agent
+                    <a th:href="@{https://zalo.me/{phoneNumber}(phoneNumber=${profile.phoneNumber})}"
+                       class="w-full bg-white text-blue-600 py-3 rounded-lg hover:bg-gray-100 transition duration-300 block text-center flex items-center justify-center gap-4 shadow">
+                        <img src="/zalo_ic.webp" alt="Zalo" class="w-6 h-6">
+                        <span class="text-lg font-medium">Liên hệ Nhà cung cấp</span>
                     </a>
 
-
-                    <button class="w-full bg-white border-2 border-blue-600 text-blue-600 py-3 rounded-lg hover:bg-blue-50 transition duration-300">Schedule Viewing</button>
                 </div>
 
 <!--                <div class="mt-6 p-4 bg-blue-50 rounded-lg">-->

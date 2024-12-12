@@ -18,10 +18,10 @@ public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @OneToOne(cascade = CascadeType.PERSIST)
     private User user;
 
     private String fullName;

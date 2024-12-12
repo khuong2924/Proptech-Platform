@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - MakeupConnect</title>
+    <title>Sign Up</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-br from-blue-500 to-blue-300 min-h-screen flex items-center justify-center p-4">
@@ -15,26 +15,32 @@
     </div>
     <div class="p-8 md:w-1/2">
         <h2 class="text-3xl font-semibold mb-6 text-center">Registry account</h2>
-        <form id="registerForm" action="/v1/register" method="post" class="space-y-4">
+        <form id="registerForm" action="/v1/register" method="post" class="space-y-4" enctype="multipart/form-data">
             <div>
-                <label for="fullname" class="block text-sm font-medium text-gray-700">Full name</label>
+                <label for="fullname" class="block text-sm font-medium text-gray-700">Tên đầy đủ</label>
                 <input type="text" id="fullname" name="fullname" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Họ và tên">
             </div>
 
             <div>
-                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Email">
+                <label for="email" class="block text-sm font-medium text-gray-700">Gmail</label>
+                <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Họ và tên">
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700">You are? </label>
+                <label for="sdt" class="block text-sm font-medium text-gray-700">Số điện thoai</label>
+                <input type="text" id="sdt" name="sdt" required class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" placeholder="Họ và tên">
+            </div>
+
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Bạn là? </label>
                 <div class="mt-1 flex space-x-4">
                     <div class="flex items-center">
-                        <input type="radio" id="role-customer" name="role" value="customer" required class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                        <input type="radio" id="role-customer" name="role" value="Khách hàng" required class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
                         <label for="role-customer" class="ml-2 text-sm font-medium text-gray-700">Khách hàng</label>
                     </div>
                     <div class="flex items-center">
-                        <input type="radio" id="role-model-artist" name="role" value="model-artist" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
+                        <input type="radio" id="role-model-artist" name="role" value="Nhà cung cấp" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300">
                         <label for="role-model-artist" class="ml-2 text-sm font-medium text-gray-700">Nhà cung cấp/Môi giới BĐS</label>
                     </div>
                 </div>
@@ -69,44 +75,20 @@
 
             <div>
                 <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
-                    Registry
+                    Đăng ký
                 </button>
             </div>
         </form>
         <p class="mt-8 text-center text-sm text-gray-600">
-            Already have an account?
-            <a href="/login" class="font-medium text-blue-600 hover:text-blue-500">Login</a>
+            Bạn đã có tài khoản?
+            <a href="/login" class="font-medium text-blue-600 hover:text-blue-500">Đăng nhập</a>
         </p>
     </div>
+
 </div>
 
 <script>
-    document.querySelector('form').addEventListener('submit', function submitForm(event) {
-        event.preventDefault();
 
-        const formData = {
-            username: document.getElementById('userName').value,
-            password: document.getElementById('password').value,
-            email: document.getElementById('email').value,
-            role: document.querySelector('input[name="role"]:checked').value
-        };
-
-        fetch('http://localhost:8080/v1/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = '/login';
-                } else {
-                    console.error('Đăng ký thất bại');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    });
 </script>
 </body>
 </html>

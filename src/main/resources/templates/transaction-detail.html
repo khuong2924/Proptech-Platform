@@ -173,13 +173,13 @@
                         <!-- Thay thế số lượng bất động sản đã bán -->
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <p class="text-2xl font-bold text-blue-600" th:text="${jobPosts.size()}">127</p>
-                            <p class="text-sm text-gray-600">Properties Sold</p>
+                            <p class="text-sm text-gray-600">Số lượng bài đăng</p>
                         </div>
 
                         <!-- Thay thế số lượng bất động sản đang bán -->
                         <div class="bg-gray-50 p-4 rounded-lg">
                             <p class="text-2xl font-bold text-green-600" th:text="${jobPosts.size()}">45</p>
-                            <p class="text-sm text-gray-600">Active Listings</p>
+                            <p class="text-sm text-gray-600">Số lượng giao dịch thành công</p>
                         </div>
                     </div>
                 </div>
@@ -240,9 +240,13 @@
 
                     <!-- For Sale Profiles -->
                     <div th:each="tran : ${saleTransactions}" class="bg-white rounded-lg shadow-md p-6 relative overflow-hidden">
-                        <div class="status-badge" th:classappend="${tran.trangThaiGiaoDich == 'Done' ? 'status-done' : 'status-unpaid'}"
-                             th:text="${tran.trangThaiGiaoDich}"></div>
-                        <h2 class="text-xl font-semibold mb-2" th:text="${tran.trangThaiGiaoDich}"></h2>
+                        <div class="status-badge"
+                             th:class="${tran.trangThaiGiaoDich == 'Done' ? 'status-done' : 'status-unpaid'}">
+                            <h2 class="text-xl font-semibold mb-2"
+                                th:text="${tran.trangThaiGiaoDich == 'Done' ? 'Đã xác nhận' : 'Chưa xác nhận'}"></h2>
+                        </div>
+
+
                         <p class="text-gray-600 mb-4"><i class="fas fa-phone-alt mr-2"></i><span th:text="${tran.sdtKhachHang}"></span></p>
                         <div class="space-y-2">
                             <p><i class="fas fa-file-alt mr-2"></i>

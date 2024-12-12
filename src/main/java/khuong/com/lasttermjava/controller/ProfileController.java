@@ -82,12 +82,30 @@ public class ProfileController {
     private ImageUploadService imageUploadService;
 
     @PostMapping("/{profileId}/updateAvt")
-    public String updateCoverPhoto(@PathVariable("profileId") Long profileId, @RequestParam("file") MultipartFile file) throws IOException {
-        String img_url = imageUploadService.uploadImage(file);
-        Profile profile = profileRepository.findById(profileId).orElseThrow(RuntimeException::new);
-        profile.setAvtPhoto(img_url);
-        profileRepository.save(profile);
-        return "Cover photo updated successfully";
+    public ResponseEntity<String> updateCoverPhoto(@PathVariable("profileId") Long profileId, @RequestParam("file") MultipartFile file) {
+        try {
+            // Upload ảnh và lấy URL
+            String img_url = imageUploadService.uploadImage(file);
+
+            // Tìm Profile, ném ngoại lệ nếu không tìm thấy
+            Profile profile = profileRepository.findById(profileId)
+                    .orElseThrow(() -> new RuntimeException("Profile not found with ID: " + profileId));
+
+            // Cập nhật ảnh đại diện
+            profile.setAvtPhoto(img_url);
+            profileRepository.save(profile);
+
+            return ResponseEntity.ok("Cover photo updated successfully");
+        } catch (RuntimeException e) {
+            // Xử lý lỗi nếu Profile không tồn tại hoặc các lỗi khác
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IOException e) {
+            // Xử lý lỗi khi upload ảnh
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading the image: " + e.getMessage());
+        } catch (Exception e) {
+            // Xử lý các lỗi không mong muốn khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred: " + e.getMessage());
+        }
     }
 
 

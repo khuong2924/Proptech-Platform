@@ -1,9 +1,6 @@
 package khuong.com.lasttermjava.controller;
 
-import jakarta.jws.WebParam;
-import khuong.com.lasttermjava.dto.JobPostDTO;
 import khuong.com.lasttermjava.dto.ProfileDTO;
-import khuong.com.lasttermjava.dto.ResponseDTO;
 import khuong.com.lasttermjava.entity.*;
 import khuong.com.lasttermjava.repository.*;
 import khuong.com.lasttermjava.service.ImageUploadService;
@@ -19,7 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -87,16 +84,23 @@ public class HomeController {
         boolean checkUser = userId != null;
         List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
         model.addAttribute("listNotis", listNotis);
+        jobPosts.sort((jobPost1, jobPost2) -> jobPost2.getThoiGianDang().compareTo(jobPost1.getThoiGianDang()));
         model.addAttribute("jobPosts", jobPosts);
         model.addAttribute("checkUser", checkUser);
 
-        //        List<ApplyInfo> infos = applyInfoRepository.findAllByJobPostUserId(userId);
-//        model.addAttribute("infos", infos);
-
-        // Sort the list based on the createdAt field
-//        jobPosts.sort((jobPost1, jobPost2) -> jobPost2.getCreatedAt().compareTo(jobPost1.getCreatedAt()));
 
         return "homePage";
+    }
+
+    @GetMapping("/pay-confirm")
+    public String payConfirm(Model model) {
+        Long userId = SessionUtils.getCurrentUserId();
+        boolean checkUser = true;
+        List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
+        model.addAttribute("listNotis", listNotis);
+        model.addAttribute("checkUser", checkUser);
+
+        return "post-confirm";
     }
 
     @GetMapping("/account")
@@ -182,7 +186,9 @@ public class HomeController {
     @PostMapping("/create")
     public String createJobPost(
             @RequestParam("loaiBaiDang") String loaiBaiDang,
-            @RequestParam("diaChi") String diaChi,
+            @RequestParam("province") String province,
+            @RequestParam("district") String district,
+            @RequestParam("detailAddress") String detailAddress,
             @RequestParam("loaiBatDongSan") String loaiBatDongSan,
             @RequestParam("dienTich") BigDecimal dienTich,
             @RequestParam("mucGia") BigDecimal mucGia,
@@ -210,6 +216,7 @@ public class HomeController {
             User user = userRepository.findById(userId).orElse(null);
             jobPost.setUser(user);
             jobPost.setLoaiBaiDang(loaiBaiDang);
+            String diaChi = detailAddress + ", " + district + ", " + province;
             jobPost.setDiaChi(diaChi);
             jobPost.setLoaiBDS(loaiBatDongSan);
             jobPost.setDienTich(dienTich);
@@ -227,6 +234,8 @@ public class HomeController {
             jobPost.setSoDienThoaiChu(soDienThoaiChu);
             jobPost.setTieuDe(tieuDe);
             jobPost.setMoTa(moTa);
+            // Thiết lập thời gian đăng
+            jobPost.setThoiGianDang(LocalDateTime.now());
             jobPost.setCongKhai(congKhai);
 
             if (images != null && !images.isEmpty()) {
@@ -238,12 +247,12 @@ public class HomeController {
             jobPostRepository.save(jobPost);
 
             redirectAttributes.addFlashAttribute("message", "Job post created successfully!");
-            return "redirect:/home";
+            return "redirect:/pay-confirm";
 
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Error creating job post.");
-            return "redirect:/home";
+            return "redirect:/pay-confirm";
         }
     }
 
@@ -271,7 +280,8 @@ public class HomeController {
             @RequestParam("trangThaiThanhToan") Boolean trangThaiThanhToan,
             @RequestParam("hopDongThue") List<MultipartFile> hopDongThue,
             @RequestParam("tienThue") BigDecimal tienThue,
-            @RequestParam("ngayTraDinhKy") String ngayTraDinhKy) throws IOException {
+            @RequestParam("ngayTraDinhKy") String ngayTraDinhKy,
+            @RequestParam("trangThaiDatCoc") Boolean trangThaiDatCoc) throws IOException {
 
         // Lấy JobPost
         JobPost jobPost = jobPostRepository.findById(id).orElseThrow(() -> new RuntimeException("Job post not found"));
@@ -283,6 +293,9 @@ public class HomeController {
         transaction.setSdtKhachHang(sdtKhachHang);
         transaction.setLoaiHoSo(loaiHoSo);
         transaction.setTrangThaiGiaoDich(false);
+        transaction.setTrangThaiDatCoc(trangThaiDatCoc);
+        Long userId = SessionUtils.getCurrentUserId();
+        transaction.setUser(userRepository.findById(userId).get());
 
         // Kiểm tra giayToPhapLy
         if (giayToPhapLy != null && !giayToPhapLy.isEmpty()) {
@@ -364,7 +377,7 @@ public class HomeController {
     @GetMapping("/transaction/{id}")
     public String transaction(@PathVariable Long id, Model model) {
         Long userId = SessionUtils.getCurrentUserId();
-        boolean checkUser = userId != null;
+        boolean checkUser = true;
         List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
         model.addAttribute("listNotis", listNotis);
         model.addAttribute("checkUser", checkUser);
@@ -379,6 +392,103 @@ public class HomeController {
     public String paymentDetail(Model model) {
         return "premium-register";
     }
+
+    @PostMapping("/v1/register")
+    public String registerUser(
+            @RequestParam("username") String username,
+            @RequestParam("password") String password,
+            @RequestParam("role") String role,
+            @RequestParam("fullname") String fullname,
+            @RequestParam("email") String email,
+            @RequestParam("sdt") String sdt,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            // Kiểm tra nếu tên đăng nhập đã tồn tại
+            if (userRepository.findByUsername(username).isPresent()) {
+                redirectAttributes.addFlashAttribute("error", "Username already exists.");
+                return "redirect:/register";
+            }
+
+            // Tạo đối tượng User và lưu thông tin
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password);// Mã hóa mật khẩu
+            user.setRole(role);
+            user.setPremium(false);
+
+            // Tạo đối tượng Profile nếu có ảnh đại diện (nếu người dùng upload ảnh)
+                Profile profile = new Profile();
+                profile.setUser(user);
+                profile.setFullName(fullname);
+                profile.setEmail(email);
+                profile.setPhoneNumber(sdt);
+                profileRepository.save(profile);
+                user.setProfile(profile);
+
+            // Lưu người dùng vào cơ sở dữ liệu
+            userRepository.save(user);
+
+            // Thêm thông báo và chuyển hướng đến trang login hoặc trang khác
+            redirectAttributes.addFlashAttribute("message", "Account created successfully!");
+            return "redirect:/login"; // Chuyển hướng đến trang đăng nhập
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("error", "Error creating account.");
+            return "redirect:/register"; // Quay lại trang đăng ký nếu có lỗi
+        }
+    }
+
+    @GetMapping("/signup")
+    public String signup(Model model) {
+        return "signUp";
+    }
+
+    @PostMapping("/jobPost/chinhsua")
+    public String createNewJobPost(@RequestParam("id") Long id,
+                                   Model model) {
+
+        Long userId = SessionUtils.getCurrentUserId();
+
+        boolean checkUser = true;
+        List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
+        model.addAttribute("listNotis", listNotis);
+        model.addAttribute("checkUser", checkUser);
+        // Tạo đối tượng jobPost từ dữ liệu gửi tới
+        JobPost jobPost = jobPostRepository.findById(id).get();
+
+
+        // Thêm vào mô hình để hiển thị trên trang
+        model.addAttribute("jobPost", jobPost);
+
+        return "post-chinhsua"; // trả về trang create-new
+    }
+
+    @PostMapping("jobPost/delete/{id}")
+    public String deleteJobPost(@PathVariable Long id, Model model) {
+        JobPost jp = jobPostRepository.findById(id).get();
+        jobPostRepository.delete(jp);
+
+        Long userId = SessionUtils.getCurrentUserId();
+        if (userId == null) {
+            model.addAttribute("errors", "Bạn cần đăng nhập để truy cập trang cá nhân");
+            return "error";
+        }
+        ProfileDTO profileDTO = profileService.getByUserId(userId);
+        model.addAttribute("profile", profileDTO);
+        List<JobPost> jobPosts = jobPostRepository.findByUserId(userId);
+        model.addAttribute("jobPosts", jobPosts);
+
+        boolean checkUser = true;
+        List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
+        model.addAttribute("listNotis", listNotis);
+        model.addAttribute("checkUser", checkUser);
+        return "redirect:/personal-page";
+
+    }
+
+
 
 }
 

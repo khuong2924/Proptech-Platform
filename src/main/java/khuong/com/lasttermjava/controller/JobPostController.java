@@ -42,8 +42,6 @@ public class JobPostController {
         return response;
     }
 
-
-
     // Cập nhật JobPost
     @PutMapping("/{id}")
     public ResponseDTO<Void> updateJobPost(@PathVariable("id") Long id, @RequestBody JobPostDTO jobPostDTO) {

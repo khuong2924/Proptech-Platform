@@ -63,6 +63,32 @@ public class PaypalController {
         return new RedirectView("/payment/error");
     }
 
+    @PostMapping("/payment/upload")
+    public RedirectView paymentToUpload() {
+        try {
+            // Kiểm tra nếu amount null hoặc rỗng
+
+            String cancelUrl = "http://localhost:8080/payment/cancel";
+            String successUrl = "http://localhost:8080/";
+
+            // Gọi service để tạo payment
+            Payment payment = paypalService.createPayment(1000.0, "USD", cancelUrl, successUrl);
+
+            // Tìm kiếm và chuyển hướng đến approval URL
+            for (Links links : payment.getLinks()) {
+                if ("approval_url".equals(links.getRel())) {
+                    return new RedirectView(links.getHref());
+                }
+            }
+
+            log.error("Approval URL not found in payment response.");
+        } catch (PayPalRESTException e) {
+            log.error("PayPal REST Exception occurred:", e);
+        }
+
+        return new RedirectView("/payment/error");
+    }
+
     @GetMapping("/payment/success")
     public String paymentSuccess(@RequestParam("paymentId") String paymentId, @RequestParam("PayerID") String payerId) {
         try {

@@ -24,7 +24,7 @@ public class RegisterController {
         this.profileRepository = profileRepository;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/registry")
     public ResponseEntity<String> registerUser(@RequestBody User user) {
         ResponseEntity<String> response = null;
 

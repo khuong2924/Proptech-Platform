@@ -69,7 +69,9 @@ class TransactionServiceTest {
                 true,
                 Set.of("Lease Contract"),
                 BigDecimal.valueOf(1000.00),
-                "2024-12-01"
+                "2024-12-01",
+                true,
+                1L
         );
     }
 

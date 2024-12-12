@@ -136,6 +136,14 @@
                 <input type="tel" id="sdtKhachHang" name="sdtKhachHang" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
             </div>
             <div>
+                <label for="trangThaiDatCoc" class="block text-sm font-medium text-gray-700">Trạng thái đặt cọc</label>
+                <select id="trangThaiDatCoc" name="trangThaiDatCoc" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <option value="true">Đã cọc</option>
+                    <option value="false">Chưa cọc</option>
+                </select>
+            </div>
+
+            <div>
                 <label for="loaiHoSo" class="block text-sm font-medium text-gray-700">Loại hồ sơ</label>
                 <select id="loaiHoSo" name="loaiHoSo" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     <option value="Bán" data-icon="fas fa-house-user">Bán</option>
@@ -151,11 +159,12 @@
                     <label for="hopDongMuaBan" class="block text-sm font-medium text-gray-700">Hợp đồng mua bán</label>
                     <input type="file" id="hopDongMuaBan" name="hopDongMuaBan" accept="image/*" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
                 </div>
+
                 <div>
                     <label for="trangThaiThanhToan" class="block text-sm font-medium text-gray-700">Trạng thái thanh toán</label>
                     <select id="trangThaiThanhToan" name="trangThaiThanhToan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                        <option value="true">Paid</option>
-                        <option value="false">Unpaid</option>
+                        <option value="true">Đã thanh toán</option>
+                        <option value="false">Chưa thanh toán</option>
                     </select>
                 </div>
             </div>

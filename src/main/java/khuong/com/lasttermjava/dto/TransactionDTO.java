@@ -33,4 +33,8 @@ public class TransactionDTO {
     private BigDecimal tienThue;
 
     private String ngayTraDinhKy;
+
+    private Boolean trangThaiDatCoc;
+
+    private Long user_id;
 }
