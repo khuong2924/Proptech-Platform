@@ -40,6 +40,14 @@
             background-color: #EF4444;
             color: white;
         }
+        .truncate {
+            display: block; /* Đảm bảo rằng đoạn văn bản hiển thị đầy đủ trên một dòng */
+            max-width: 100%; /* Giới hạn chiều rộng tối đa của phần tử */
+            white-space: nowrap; /* Không cho phép dòng văn bản xuống dòng */
+            overflow: hidden; /* Ẩn phần văn bản thừa */
+            text-overflow: ellipsis; /* Thêm dấu ba chấm (...) vào cuối đoạn văn bản nếu nó bị cắt */
+        }
+
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -82,8 +90,8 @@
                             <!-- Lặp qua danh sách notifications -->
                             <li th:each="noti : ${listNotis}" class="bg-white p-4 rounded shadow">
                                 <!-- Tạo liên kết tới postDetail với jobPost.id -->
-                                <a th:href="@{/postDetail/{id}(id=${noti.jobPost.id})}" class="block">
-                                    <p class="font-semibold" th:text="${noti.user.username}">John Doe</p>
+                                <a th:href="@{/transaction/{id}(id=${noti.transaction.id})}" class="block">
+                                    <p class="font-semibold" th:text="${noti.jobPost.user.profile.fullName}">John Doe</p>
                                     <p class="text-sm text-gray-600 mb-2" th:text="${noti.content}">Requested a property viewing for Spacious apartment in downtown.</p>
                                 </a>
                                 <div class="flex space-x-2">
@@ -104,7 +112,10 @@
                             </li>
                         </ul>
                     </div>
+
                 </div>
+
+
 
                 <div class="relative">
                     <button onclick="toggleDropdown()" class="w-10 h-10 rounded-full bg-white p-1 hover:shadow-lg transform hover:-translate-y-1 transition duration-300 hover:scale-105 flex items-center justify-center group">
@@ -133,7 +144,6 @@
         </div>
     </nav>
 </header>
-
 
 
 <div class="container mx-auto p-4 md:p-8">
@@ -168,7 +178,6 @@
                 </div>
 
                 <div class="mt-6 w-full">
-                    <h2 class="text-lg font-semibold text-gray-800 mb-2">Statistics</h2>
                     <div class="grid grid-cols-2 gap-4">
                         <!-- Thay thế số lượng bất động sản đã bán -->
                         <div class="bg-gray-50 p-4 rounded-lg">
@@ -215,57 +224,79 @@
 
                 <div class="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
                     <!-- For Rent Profiles -->
-                    <div th:each="tran : ${rentTransactions}" class="bg-white rounded-lg shadow-md p-6 relative overflow-hidden">
-                        <div class="status-badge" th:classappend="${tran.trangThaiGiaoDich == 'Done' ? 'status-done' : 'status-unpaid'}"
-                             th:text="${tran.trangThaiGiaoDich}"></div>
+<!--                    <div th:each="tran : ${rentTransactions}" class="bg-white rounded-lg shadow-md p-6 relative overflow-hidden">-->
+<!--                        <button-->
+<!--                                th:onclick="'deleteTransaction(' + ${tran.id} + ')'"-->
+<!--                                class="absolute top-4 right-4 bg-red-500 text-white font-bold py-1 px-3 rounded hover:bg-red-600">-->
+<!--                            Xóa-->
+<!--                        </button>-->
+<!--                        <div class="status-badge" th:classappend="${tran.trangThaiGiaoDich == 'Done' ? 'status-done' : 'status-unpaid'}"-->
+<!--                             th:text="${tran.trangThaiGiaoDich}"></div>-->
+<!--                        <h2 class="text-xl font-semibold mb-2" th:text="${tran.noiDung}"></h2>-->
+<!--                        <p class="text-gray-600 mb-4"><i class="fas fa-phone-alt mr-2"></i><span th:text="${tran.sdtKhachHang}"></span></p>-->
+<!--                        <div class="space-y-2">-->
+<!--                            <p><i class="fas fa-file-contract mr-2"></i>-->
+<!--                                <span class="font-medium">Hợp đồng thuê:</span>-->
+<!--                                <a th:href="*{tran.hopDongThue}" class="text-blue-500 hover:underline"-->
+<!--                                   th:text="${tran.hopDongThue}"></a>-->
+<!--                            </p>-->
+
+<!--                            <p><i class="fas fa-money-bill-wave mr-2"></i>-->
+<!--                                <span class="font-medium">Tiền thuê:</span>-->
+<!--                                <span th:text="'$' + ${tran.tienThue}"></span>-->
+<!--                            </p>-->
+<!--                            <p><i class="fas fa-calendar-alt mr-2"></i>-->
+<!--                                <span class="font-medium">Ngày trả định kỳ: </span>-->
+<!--                                <span th:text="${tran.ngayTraDinhKy}"></span>-->
+<!--                            </p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                    <!-- For Sale Profiles -->
+                    <div th:each="tran : ${rentTransactions}" class="bg-white rounded-lg shadow-md p-6 relative">
+                        <div class="flex items-center mb-4 justify-between">
+                            <!-- Status Badge (Bên trái) -->
+                            <div class="status-badge px-2 py-1 rounded text-white text-sm font-bold"
+                                 th:classappend="${tran.trangThaiGiaoDich} ? 'bg-green-500' : 'bg-red-500'"
+                                 th:text="${tran.trangThaiGiaoDich} ? 'Đã cọc' : 'Chưa cọc'">
+                            </div>
+                        </div>
+
+                        <!-- Nội dung giao dịch -->
                         <h2 class="text-xl font-semibold mb-2" th:text="${tran.noiDung}"></h2>
                         <p class="text-gray-600 mb-4"><i class="fas fa-phone-alt mr-2"></i><span th:text="${tran.sdtKhachHang}"></span></p>
                         <div class="space-y-2">
-                            <p><i class="fas fa-file-contract mr-2"></i>
+                            <p class="truncate">
+                                <i class="fas fa-file-contract mr-2"></i>
                                 <span class="font-medium">Hợp đồng thuê:</span>
-                                <a th:href="*{tran.hopDongThue}" class="text-blue-500 hover:underline"
-                                   th:text="${tran.hopDongThue}"></a>
+                                <a th:href="*{tran.hopDongThue}" class="text-blue-500 hover:underline" th:text="${tran.hopDongThue}"></a>
                             </p>
 
                             <p><i class="fas fa-money-bill-wave mr-2"></i>
                                 <span class="font-medium">Tiền thuê:</span>
-                                <span th:text="'$' + ${tran.tienThue}"></span>
+                                <span th:text="${tran.tienThue} + ' VND'"></span>
                             </p>
                             <p><i class="fas fa-calendar-alt mr-2"></i>
                                 <span class="font-medium">Ngày trả định kỳ: </span>
                                 <span th:text="${tran.ngayTraDinhKy}"></span>
                             </p>
                         </div>
-                    </div>
 
-                    <!-- For Sale Profiles -->
-                    <div th:each="tran : ${saleTransactions}" class="bg-white rounded-lg shadow-md p-6 relative overflow-hidden">
-                        <div class="status-badge"
-                             th:class="${tran.trangThaiGiaoDich == 'Done' ? 'status-done' : 'status-unpaid'}">
-                            <h2 class="text-xl font-semibold mb-2"
-                                th:text="${tran.trangThaiGiaoDich == 'Done' ? 'Đã xác nhận' : 'Chưa xác nhận'}"></h2>
-                        </div>
+                        <!-- Buttons (Bên phải, dưới cùng) -->
+                        <div class="flex items-center justify-end space-x-2 mt-4">
+                            <a th:href="@{/transaction/{id}(id=${tran.id})}" class="text-blue-500 hover:text-blue-700">
+                                <i class="fas fa-eye text-lg"></i>
+                            </a>
+                            <form th:action="@{/transaction/delete/{id}(id=${tran.id})}" method="post" class="inline-block">
+                                <button type="submit" class="text-gray-500 hover:text-red-500">
+                                    <i class="fas fa-trash-alt text-lg"></i>
+                                </button>
+                            </form>
 
-
-                        <p class="text-gray-600 mb-4"><i class="fas fa-phone-alt mr-2"></i><span th:text="${tran.sdtKhachHang}"></span></p>
-                        <div class="space-y-2">
-                            <p><i class="fas fa-file-alt mr-2"></i>
-                                <span class="font-medium">Giấy tờ pháp lý: </span>
-                                <a th:href="${tran.giayToPhapLy}" class="text-blue-500 hover:underline"
-                                   th:text="${tran.giayToPhapLy}"></a>
-                            </p>
-                            <p><i class="fas fa-file-signature mr-2"></i>
-                                <span class="font-medium">Hợp đồng mua bán: </span>
-                                <a th:href="${tran.hopDongMuaBan}" class="text-blue-500 hover:underline"
-                                   th:text="${tran.hopDongMuaBan}"></a>
-                            </p>
-                            <p><i class="fas fa-money-check-alt mr-2"></i>
-                                <span class="font-medium">Trạng thái thanh toán:</span>
-                                <span th:classappend="${tran.trangThaiThanhToan == 'Paid' ? 'text-green-500' : 'text-red-500'}"
-                                      th:text="${tran.trangThaiThanhToan}"></span>
-                            </p>
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -275,5 +306,20 @@
 </body>
 
 <script>
+
+    function toggleDropdown() {
+        const dropdown = document.getElementById('userDropdown');
+        dropdown.classList.toggle('hidden');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('userDropdown');
+        const userButton = event.target.closest('button');
+
+        if (!userButton && !dropdown.contains(event.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
 </script>
 </html>

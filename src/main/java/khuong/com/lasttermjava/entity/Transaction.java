@@ -56,7 +56,7 @@ public class Transaction {
     @Column(name = "hopDongThue")
     private Set<String> hopDongThue = new HashSet<>();
 
-    @Column(name = "tienThue", nullable = false, precision = 18, scale = 2)
+    @Column(name = "tienThue", precision = 18, scale = 2)
     private BigDecimal tienThue;
 
     @Column(name = "ngayTraDinhKy", columnDefinition = "TEXT")

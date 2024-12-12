@@ -168,7 +168,7 @@
 
                     <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div class="p-4 bg-gray-50 rounded-lg">
-                            <span class="block text-sm text-gray-600">Diện tích</span>
+                            <span class="block text-sm text-gray-600">Diện tích (m²)</span>
                             <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.dienTich}">180 m²</span>
                         </div>
 
@@ -200,12 +200,20 @@
                                 <p class="mt-1 text-gray-600" th:text="${jobPost.giayToPhapLy}">Full ownership certificate</p>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg">
-                                <h3 class="font-semibold text-gray-800">Lối vào</h3>
+                                <h3 class="font-semibold text-gray-800">Hướng nhà</h3>
+                                <p class="mt-1 text-gray-600" th:text="${jobPost.huongNha}">Direct road access</p>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <h3 class="font-semibold text-gray-800">Hướng ban công</h3>
+                                <p class="mt-1 text-gray-600" th:text="${jobPost.huongBanCong}">South-East facing</p>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <h3 class="font-semibold text-gray-800">Lối vào (m²)</h3>
                                 <p class="mt-1 text-gray-600" th:text="${jobPost.duongVao}">Direct road access</p>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg">
-                                <h3 class="font-semibold text-gray-800">Hướng nhà</h3>
-                                <p class="mt-1 text-gray-600" th:text="${jobPost.huongNha}">South-East facing</p>
+                                <h3 class="font-semibold text-gray-800">Nội thất</h3>
+                                <p class="mt-1 text-gray-600" th:text="${jobPost.noiThat}">South-East facing</p>
                             </div>
                         </div>
                     </div>

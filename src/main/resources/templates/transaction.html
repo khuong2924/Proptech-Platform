@@ -200,13 +200,13 @@
                     <div>
                         <p class="text-sm text-gray-600">Trạng thái thanh toán</p>
                         <p class="font-medium" th:text="${transaction.trangThaiThanhToan}"
-                           th:class="${transaction.trangThaiThanhToan == 'Done' ? 'text-green-600' : 'text-red-600'}">
+                           th:class="${transaction.trangThaiThanhToan == 'Done' ? 'text-red-600' : 'text-green-600'}">
                             Done
                         </p>
                     </div>
                 </div>
                 <div>
-                    <p class="text-sm text-gray-600 mb-2">Legal Papers</p>
+                    <p class="text-sm text-gray-600 mb-2">Hợp đồng mua bán</p>
                     <div class="grid grid-cols-2 gap-4">
                         <ul>
                             <li th:each="url : ${transaction.hopDongMuaBan}">
@@ -217,7 +217,7 @@
                 </div>
 
                 <div>
-                    <p class="text-sm text-gray-600 mb-2">Sales Contract</p>
+                    <p class="text-sm text-gray-600 mb-2">Giấy tờ pháp lý</p>
                     <div class="grid grid-cols-2 gap-4">
                         <ul>
                             <li th:each="url : ${transaction.giayToPhapLy}">

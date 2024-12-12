@@ -153,13 +153,13 @@
                             <!-- Thay thế số lượng bất động sản đã bán -->
                             <div class="bg-gray-50 p-4 rounded-lg">
                                 <p class="text-2xl font-bold text-blue-600" th:text="${jobPosts.size()}">127</p>
-                                <p class="text-sm text-gray-600">Properties Sold</p>
+                                <p class="text-sm text-gray-600">Số lượng bài đăng</p>
                             </div>
 
                             <!-- Thay thế số lượng bất động sản đang bán -->
                             <div class="bg-gray-50 p-4 rounded-lg">
-                                <p class="text-2xl font-bold text-green-600" th:text="${jobPosts.size()}">45</p>
-                                <p class="text-sm text-gray-600">Active Listings</p>
+                                <p class="text-2xl font-bold text-green-600" th:text="${trans.size()}">45</p>
+                                <p class="text-sm text-gray-600">Số lượng giao dịch thành công</p>
                             </div>
                         </div>
                     </div>
@@ -216,7 +216,6 @@
 
 
                                         <form th:action="@{/jobPost/delete/{id}(id=${jobPost.id})}" method="post" class="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 hover:bg-red-100 hover:text-red-700 transition-all duration-200">
-                                            <input type="hidden" name="_method" value="DELETE"/>
                                             <button type="submit" class="flex items-center gap-2">
                                                 <i class="fas fa-trash text-red-600"></i>
                                                 Xóa
@@ -228,7 +227,6 @@
                                             <i class="fas fa-folder-plus text-yellow-600"></i>
                                             Tạo hồ sơ giao dịch
                                         </a>
-
 
 
                                     </div>

@@ -134,6 +134,9 @@ public class HomeController {
         List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
         model.addAttribute("listNotis", listNotis);
         model.addAttribute("checkUser", checkUser);
+
+        List<Transaction> trans = transactionRepository.findByUserIdAndTrangThaiGiaoDich(userId, true);
+        model.addAttribute("trans", trans);
         return "personalPage";
         }
 
@@ -279,12 +282,13 @@ public class HomeController {
             @RequestParam("hopDongMuaBan") List<MultipartFile> hopDongMuaBan,
             @RequestParam("trangThaiThanhToan") Boolean trangThaiThanhToan,
             @RequestParam("hopDongThue") List<MultipartFile> hopDongThue,
-            @RequestParam("tienThue") BigDecimal tienThue,
+            @RequestParam("tienThue") String tienThueStr,  // Thay vì BigDecimal, nhận dưới dạng String
             @RequestParam("ngayTraDinhKy") String ngayTraDinhKy,
             @RequestParam("trangThaiDatCoc") Boolean trangThaiDatCoc) throws IOException {
 
         // Lấy JobPost
-        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(() -> new RuntimeException("Job post not found"));
+        JobPost jobPost = jobPostRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job post not found"));
 
         // Tạo hoặc cập nhật Transaction
         Transaction transaction = new Transaction();
@@ -333,25 +337,34 @@ public class HomeController {
             transaction.setHopDongThue(imageUrls);
         }
 
+        // Xử lý tienThue
+        BigDecimal tienThue = null;
+        try {
+            if (tienThueStr != null && !tienThueStr.isEmpty()) {
+                tienThue = new BigDecimal(tienThueStr); // Chuyển đổi String thành BigDecimal
+            }
+        } catch (NumberFormatException e) {
+            // Nếu chuyển đổi không thành công, tienThue sẽ giữ giá trị null
+        }
         transaction.setTrangThaiThanhToan(trangThaiThanhToan);
         transaction.setTienThue(tienThue);
         transaction.setNgayTraDinhKy(ngayTraDinhKy);
 
         transactionRepository.save(transaction);
-        //
-        //
 
-       Notification noti = new Notification();
-       noti.setJobPost(jobPost);
-       Profile profile = profileRepository.findByPhoneNumber(sdtKhachHang).get();
-       noti.setUser(profile.getUser());
-       noti.setFlagged(false);
-       noti.setContent(noiDung);
-       noti.setTransaction(transaction);
-       notificationRepository.save(noti);
+        // Thêm Notification
+        Notification noti = new Notification();
+        noti.setJobPost(jobPost);
+        Profile profile = profileRepository.findByPhoneNumber(sdtKhachHang).get();
+        noti.setUser(profile.getUser());
+        noti.setFlagged(false);
+        noti.setContent(noiDung);
+        noti.setTransaction(transaction);
+        notificationRepository.save(noti);
 
         return "redirect:/home";
     }
+
 
     @PostMapping("updateTrans/{id}")
     public String updateTrans(@PathVariable Long id, Model model) {
@@ -471,10 +484,6 @@ public class HomeController {
         jobPostRepository.delete(jp);
 
         Long userId = SessionUtils.getCurrentUserId();
-        if (userId == null) {
-            model.addAttribute("errors", "Bạn cần đăng nhập để truy cập trang cá nhân");
-            return "error";
-        }
         ProfileDTO profileDTO = profileService.getByUserId(userId);
         model.addAttribute("profile", profileDTO);
         List<JobPost> jobPosts = jobPostRepository.findByUserId(userId);
@@ -485,6 +494,25 @@ public class HomeController {
         model.addAttribute("listNotis", listNotis);
         model.addAttribute("checkUser", checkUser);
         return "redirect:/personal-page";
+    }
+
+    @PostMapping("transaction/delete/{id}")
+    public String deleteTran(@PathVariable Long id, Model model) {
+        Transaction transaction = transactionRepository.findById(id).get();
+        transactionRepository.delete(transaction);
+
+        Long userId = SessionUtils.getCurrentUserId();
+        ProfileDTO profileDTO = profileService.getByUserId(userId);
+        model.addAttribute("profile", profileDTO);
+        List<JobPost> jobPosts = jobPostRepository.findByUserId(userId);
+        model.addAttribute("jobPosts", jobPosts);
+
+        boolean checkUser = true;
+        List<Notification> listNotis = notificationRepository.findByUser(userRepository.findById(userId).get());
+        model.addAttribute("listNotis", listNotis);
+        model.addAttribute("checkUser", checkUser);
+        return "redirect:/transaction-page";
+
 
     }
 
