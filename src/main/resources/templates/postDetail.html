@@ -134,12 +134,13 @@
                     </div>
                     <div class="p-4 overflow-x-auto whitespace-nowrap">
                         <div class="flex space-x-4">
-                            <th:block th:each="imageUrl : ${jobPost.imageUrls}">
+                            <th:block th:each="imageUrl, iterStat : ${jobPost.imageUrls}">
                                 <img th:src="@{${imageUrl}}" alt="Job Post Image" class="thumbnail h-20 w-32 object-cover cursor-pointer rounded" onclick="setMainImage(${iterStat.index})">
                             </th:block>
                         </div>
                     </div>
                 </div>
+
 
                 <div class="p-6">
                     <div class="flex justify-between items-start">
@@ -153,7 +154,7 @@
                     </div>
 
                     <div class="mt-6">
-                        <h2 class="text-xl font-semibold text-gray-800">Property Description</h2>
+                        <h2 class="text-xl font-semibold text-gray-800">Nội dung bài đăng</h2>
                         <p class="mt-3 text-gray-600 leading-relaxed" th:text="${jobPost.moTa}">
                             This stunning modern family home offers a perfect blend of comfort and luxury...
                         </p>
@@ -161,15 +162,15 @@
 
                     <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div class="p-4 bg-gray-50 rounded-lg">
-                            <span class="block text-sm text-gray-600">Bedrooms</span>
+                            <span class="block text-sm text-gray-600">Số phòng ngủ</span>
                             <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.soPhongNgu}">4</span>
                         </div>
                         <div class="p-4 bg-gray-50 rounded-lg">
-                            <span class="block text-sm text-gray-600">Bathrooms</span>
+                            <span class="block text-sm text-gray-600">Số phòng tắm</span>
                             <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.soPhongTamVeSinh}">3</span>
                         </div>
                         <div class="p-4 bg-gray-50 rounded-lg">
-                            <span class="block text-sm text-gray-600">Area</span>
+                            <span class="block text-sm text-gray-600">Diện tích</span>
                             <span class="block text-lg font-semibold text-gray-800" th:text="${jobPost.dienTich}">180 m²</span>
                         </div>
 <!--                        <div class="p-4 bg-gray-50 rounded-lg">-->
@@ -180,22 +181,22 @@
 
 
                     <div class="mt-8">
-                        <h2 class="text-xl font-semibold text-gray-800">Property Characteristics</h2>
+                        <h2 class="text-xl font-semibold text-gray-800">Thông tin chi tiết</h2>
                         <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="p-4 bg-gray-50 rounded-lg">
-                                <h3 class="font-semibold text-gray-800">Frontage</h3>
+                                <h3 class="font-semibold text-gray-800">Mặt tiền</h3>
                                 <p class="mt-1 text-gray-600" th:text="${jobPost.matTien}">8 meters width</p>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg">
-                                <h3 class="font-semibold text-gray-800">Legality</h3>
+                                <h3 class="font-semibold text-gray-800">Giấy tờ pháp lý</h3>
                                 <p class="mt-1 text-gray-600" th:text="${jobPost.giayToPhapLy}">Full ownership certificate</p>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg">
-                                <h3 class="font-semibold text-gray-800">Access</h3>
+                                <h3 class="font-semibold text-gray-800">Lối vào</h3>
                                 <p class="mt-1 text-gray-600" th:text="${jobPost.duongVao}">Direct road access</p>
                             </div>
                             <div class="p-4 bg-gray-50 rounded-lg">
-                                <h3 class="font-semibold text-gray-800">Orientation</h3>
+                                <h3 class="font-semibold text-gray-800">Hướng nhà</h3>
                                 <p class="mt-1 text-gray-600" th:text="${jobPost.huongNha}">South-East facing</p>
                             </div>
                         </div>
@@ -228,7 +229,11 @@
                 </div>
 
                 <div class="mt-6 space-y-4">
-                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300">Contact Agent</button>
+                    <a th:href="@{https://zalo.me/{phoneNumber}(phoneNumber=${profile.phoneNumber})}" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300 block text-center">
+                        Contact Agent
+                    </a>
+
+
                     <button class="w-full bg-white border-2 border-blue-600 text-blue-600 py-3 rounded-lg hover:bg-blue-50 transition duration-300">Schedule Viewing</button>
                 </div>
 
@@ -245,30 +250,37 @@
 </body>
 
 <script>
-    // const images = [
-    //     "https://images.unsplash.com/photo-1564013799919-ab600027ffc6",
-    //     "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
-    //     "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83",
-    //     "https://images.unsplash.com/photo-1576941089067-2de3c901e126"
-    // ];
-    //
-    // let currentImageIndex = 0;
-    //
-    // function setMainImage(index) {
-    //     currentImageIndex = index;
-    //     document.getElementById('mainImage').src = images[index];
-    //     updateThumbnails();
-    // }
-    //
-    // function previousImage() {
-    //     currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-    //     setMainImage(currentImageIndex);
-    // }
-    //
-    // function nextImage() {
-    //     currentImageIndex = (currentImageIndex + 1) % images.length;
-    //     setMainImage(currentImageIndex);
-    // }
+    let currentImageIndex = 0;  // Mặc định là ảnh đầu tiên
+
+    // Hàm để cập nhật ảnh chính
+    function setMainImage(index) {
+        currentImageIndex = index;  // Cập nhật chỉ mục ảnh hiện tại
+        const imageUrl = document.querySelectorAll('.thumbnail')[index].src; // Lấy URL của ảnh được click
+        document.getElementById('mainImage').src = imageUrl;  // Cập nhật ảnh chính
+    }
+
+    // Hàm chuyển đến ảnh trước
+    function previousImage() {
+        // Kiểm tra nếu đang ở ảnh đầu tiên, thì không quay lại được
+        if (currentImageIndex > 0) {
+            currentImageIndex--;
+            const imageUrl = document.querySelectorAll('.thumbnail')[currentImageIndex].src;
+            document.getElementById('mainImage').src = imageUrl;
+        }
+    }
+
+    // Hàm chuyển đến ảnh tiếp theo
+    function nextImage() {
+        // Kiểm tra nếu đang ở ảnh cuối, thì không tiếp tục được
+        if (currentImageIndex < document.querySelectorAll('.thumbnail').length - 1) {
+            currentImageIndex++;
+            const imageUrl = document.querySelectorAll('.thumbnail')[currentImageIndex].src;
+            document.getElementById('mainImage').src = imageUrl;
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        setMainImage(0); // Hiển thị ảnh đầu tiên khi trang được tải
+    });
 
 
 

@@ -264,9 +264,10 @@
                     <!-- Dùng th:href để tạo liên kết tới trang chi tiết -->
                     <a th:href="@{/postDetail/{id}(id=${jobPost.id})}">
                         <div class="flex">
-                            <div class="w-1/3">
-                                <img th:src="@{${jobPost.imageUrls[2]}}" alt="Job Image" class="w-full h-full object-cover">
+                            <div class="w-1/3 relative" style="aspect-ratio: 4 / 3;"> <!-- Tạo tỷ lệ 4:3 bằng cách sử dụng padding-bottom -->
+                                <img th:src="@{${jobPost.imageUrls[0]}}" alt="Job Image" class="absolute inset-0 w-full h-full object-cover">
                             </div>
+
                             <div class="w-2/3 p-6">
                                 <div class="flex justify-between items-start">
                                     <div>

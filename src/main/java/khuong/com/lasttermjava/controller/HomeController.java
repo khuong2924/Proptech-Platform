@@ -380,17 +380,5 @@ public class HomeController {
         return "premium-register";
     }
 
-//    @GetMapping("/payment/success")
-//    public String paymentSuccess(Model model) {
-//        return "payment-success";
-//    }
-//
-//    @GetMapping("/payment/cancle")
-//    public String paymentCancel(Model model) {
-//        return "payment-error";
-//    }
-//
-
-
 }
 
