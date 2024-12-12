@@ -13,6 +13,13 @@
     <script src="https://unpkg.com/tippy.js@6"></script>
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light.css">
     <style>
+        /* CSS để làm nổi bật phần tử được chọn */
+        .selected {
+            border-color: #34D399;  /* Màu border khi chọn */
+            border-width: 10px;  /* Độ dày viền khi chọn */
+            box-shadow: 0 0 10px rgba(52, 211, 153, 0.5);  /* Hiệu ứng shadow khi chọn */
+        }
+
         body { font-family: "Poppins", sans-serif; }
         .status-badge {
             position: absolute;
@@ -159,17 +166,20 @@
 
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Chọn gói đăng ký</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8" id="plan-options">
+            <!-- Gói tháng -->
             <div class="plan-card border rounded-lg p-4 text-center hover:shadow-lg transition duration-300 cursor-pointer" data-plan="monthly" data-price="290.000" data-period="thanh toán mỗi tháng">
                 <h4 class="text-lg font-semibold mb-2">Gói tháng</h4>
                 <p class="text-3xl font-bold text-blue-600">290.000</p>
                 <p class="text-sm text-gray-600">mỗi tháng</p>
             </div>
+            <!-- Gói năm -->
             <div class="plan-card border rounded-lg p-4 text-center hover:shadow-lg transition duration-300 cursor-pointer" data-plan="yearly" data-price="2.070.000" data-period="thanh toán mỗi năm">
                 <h4 class="text-lg font-semibold mb-2">Gói năm</h4>
                 <p class="text-3xl font-bold text-blue-600">2.070.000</p>
                 <p class="text-sm text-gray-600">mỗi năm</p>
                 <p class="text-sm text-green-600 font-semibold mt-2">Save 17%</p>
             </div>
+            <!-- Gói vĩnh viễn -->
             <div class="plan-card border rounded-lg p-4 text-center hover:shadow-lg transition duration-300 cursor-pointer" data-plan="quarterly" data-price="10.000.000" data-period="dùng trọn đời">
                 <h4 class="text-lg font-semibold mb-2">Gói vĩnh viễn</h4>
                 <p class="text-3xl font-bold text-blue-600">10.000.000</p>
@@ -177,9 +187,10 @@
             </div>
         </div>
 
+
         <div class="mb-6">
             <label for="payment-method" class="block text-sm font-medium text-gray-700 mb-2">
-                Payment Method
+                Phương thức thanh toán
             </label>
             <select id="payment-method" class="w-full">
                 <option value="credit-card">Credit Card</option>
@@ -188,11 +199,6 @@
             </select>
         </div>
 
-        <div class="mb-6 p-4 bg-gray-100 rounded-lg">
-            <h4 class="text-lg font-semibold mb-2">Gói ưu đãi đã chọn:</h4>
-            <p class="text-2xl font-bold text-blue-600"><span id="selected-price"></span> VND</p>
-            <p class="text-sm text-gray-600"><span id="selected-period"></span></p>
-        </div>
 
         <div class="mb-6">
             <label class="flex items-center">
@@ -202,15 +208,63 @@
                     </span>
             </label>
         </div>
-
-        <button id="register-btn" class="w-full bg-gradient-to-r from-blue-600 to-purple-600  to-indigo-600 text-white py-4 rounded-lg font-bold text-lg hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-lg flex items-center justify-center">
-            <i data-feather="check-circle" class="mr-2"></i>
-            Đăng ký ngay
-        </button>
+        <form th:action="@{/payment/create}" method="post">
+            <input type="hidden" name="total" id="total" value="0" />
+            <button id="register-btn" type="submit" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 to-indigo-600 text-white py-4 rounded-lg font-bold text-lg hover:from-blue-600 hover:to-indigo-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 shadow-lg flex items-center justify-center">
+                <i data-feather="check-circle" class="mr-2"></i>
+                Đăng ký ngay
+            </button>
+        </form>
     </div>
 </div>
 
 <script>
+
+    const planCards = document.querySelectorAll('.plan-card');
+    const totalInput = document.getElementById('total');
+
+    planCards.forEach(card => {
+        card.addEventListener('click', () => {
+            // Bỏ chọn tất cả các gói khác
+            planCards.forEach(c => c.classList.remove('border-blue-600'));
+            // Đánh dấu gói được chọn
+            card.classList.add('border-blue-600');
+            // Lấy giá và gán vào input hidden
+            const price = card.getAttribute('data-price');
+            totalInput.value = price;
+        });
+    });
+
+    document.querySelectorAll('.plan-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+            // Loại bỏ class 'selected' khỏi tất cả các phần tử
+            document.querySelectorAll('.plan-card').forEach(function(item) {
+                item.classList.remove('selected');
+            });
+
+            // Thêm class 'selected' vào phần tử đang được click
+            card.classList.add('selected');
+        });
+    });
+
+
+
+    function simulatePayment() {
+        // Giả lập xác suất thành công hoặc thất bại.
+        const isSuccess = Math.random() > 0.5;
+
+        document.getElementById('payment-page').classList.add('hidden');
+
+        if (isSuccess) {
+            document.getElementById('success-page').classList.remove('hidden');
+            document.getElementById('current-date').textContent = `Date: ${new Date().toLocaleDateString()}`;
+        } else {
+            // Hiển thị trang Failed Page nếu thanh toán thất bại.
+            document.getElementById('failed-page').classList.remove('hidden');
+        }
+    }
+
+
     $(document).ready(function() {
         // Initialize Feather Icons
         feather.replace();
@@ -284,7 +338,11 @@
             }, 1000);
         });
     });
+
+
 </script>
 </body>
+
+
 </html>
 
